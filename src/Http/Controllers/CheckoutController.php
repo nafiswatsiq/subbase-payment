@@ -40,7 +40,7 @@ class CheckoutController extends Controller
         $planModel = config('subbase.models.plan', \Nafiswatsiq\Subbase\Models\Plan::class);
         $plan = $planModel::query()->where('slug', $plan)->active()->firstOrFail();
         $currency = $planModel::currencyFromLocale(app()->getLocale());
-        $pricing = PlanPriceHelper::formatWithDiscounts($plan, $currency);
+        $pricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
 
         try {
             $result = $payments->driver()->charge(new PaymentRequest(
@@ -53,6 +53,7 @@ class CheckoutController extends Controller
                 route('subbase-payment.checkout.cancel', $plan->slug),
             ));
         } catch (\Throwable $exception) {
+            report($exception);
             throw ValidationException::withMessages(['payment' => 'Unable to start payment. Please try again later.']);
         }
 
