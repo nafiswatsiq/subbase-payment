@@ -6,6 +6,8 @@ return [
     'checkout' => [
         'path' => 'checkout',
         'middleware' => ['web'],
+        'return_url' => null,
+        'cancel_url' => null,
     ],
 
     'tables' => [

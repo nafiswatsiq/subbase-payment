@@ -5,13 +5,14 @@ namespace Nafiswatsiq\SubbasePayment\Gateways;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Nafiswatsiq\SubbasePayment\Contracts\PaymentGatewayInterface;
+use Nafiswatsiq\SubbasePayment\Contracts\CapturesPayments;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\Data\PaymentResult;
 use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
 use RuntimeException;
 
-class PaypalGateway implements PaymentGatewayInterface
+class PaypalGateway implements PaymentGatewayInterface, CapturesPayments
 {
     public function charge(PaymentRequest $request): PaymentResult
     {
@@ -48,13 +49,42 @@ class PaypalGateway implements PaymentGatewayInterface
         throw new RuntimeException('PayPal order cancellation is handled by the webhook lifecycle.');
     }
 
+    public function capture(string $transactionId): PaymentResult
+    {
+        $response = $this->api()
+            ->withBody('{}', 'application/json')
+            ->post('/v2/checkout/orders/'.$transactionId.'/capture');
+
+        if ($response->failed()) {
+            $order = $this->api()
+                ->get('/v2/checkout/orders/'.$transactionId)
+                ->throw()
+                ->json();
+
+            if (($order['status'] ?? null) === 'COMPLETED') {
+                return new PaymentResult('paid', $transactionId, null, ['order' => $order]);
+            }
+
+            $response->throw();
+        }
+
+        $payload = $response->json();
+
+        return new PaymentResult(
+            ($payload['status'] ?? null) === 'COMPLETED' ? 'paid' : 'pending',
+            $transactionId,
+            null,
+            ['capture' => $payload],
+        );
+    }
+
     public function handleWebhook(array $payload, array $headers = []): PaymentResult
     {
         $this->verifyWebhook($payload, $headers);
 
         $eventType = (string) ($payload['event_type'] ?? '');
         $status = match ($eventType) {
-            'PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED' => 'paid',
+            'PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED', 'CHECKOUT.PAYMENT-RESOURCE.PAYMENT-COMPLETED' => 'paid',
             'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED' => 'failed',
             'PAYMENT.CAPTURE.REVERSED', 'PAYMENT.CAPTURE.REFUNDED' => 'canceled',
             default => 'pending',
@@ -66,8 +96,22 @@ class PaypalGateway implements PaymentGatewayInterface
                 ?? $payload['resource']['id']
                 ?? null,
             null,
-            ['event_id' => $payload['id'] ?? null, 'payload' => $payload],
+            [
+                'event_id' => $payload['id'] ?? null,
+                'event_type' => $eventType,
+                'payload' => $payload,
+            ],
         );
+    }
+
+    public function name(): string
+    {
+        return 'PayPal';
+    }
+
+    public function logo(): ?string
+    {
+        return 'https://www.paypalobjects.com/webstatic/icon/pp258.png';
     }
 
     protected function api(): PendingRequest

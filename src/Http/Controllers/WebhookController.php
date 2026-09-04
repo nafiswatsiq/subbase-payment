@@ -27,6 +27,10 @@ class WebhookController extends Controller
         $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
         $eventId = $result->data['event_id'] ?? null;
 
+        if ($eventId && DB::table($table)->where('webhook_event_id', $eventId)->exists()) {
+            return response()->json(['ok' => true]);
+        }
+
         $found = DB::transaction(function () use ($table, $result, $eventId): bool {
             if ($eventId && DB::table($table)->where('webhook_event_id', $eventId)->exists()) {
                 return true;
@@ -52,6 +56,12 @@ class WebhookController extends Controller
             }
 
             DB::table($table)->where('id', $payment->id)->update($updates);
+
+            if ($result->status === 'paid') {
+                $updatedRecord = DB::table($table)->where('id', $payment->id)->first();
+                $metadata = is_string($updatedRecord->metadata ?? null) ? (json_decode($updatedRecord->metadata, true) ?? []) : [];
+                event(new \Nafiswatsiq\SubbasePayment\Events\PaymentReceived($updatedRecord, $metadata));
+            }
 
             return true;
         });

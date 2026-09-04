@@ -46,9 +46,66 @@ class InstallPaymentCommand extends Command
 
         $this->writeDriverEnvStubs($driver);
 
+        $this->publishStubs();
+
         $this->info("Subbase Payment configured with the {$driver} driver.");
 
         return self::SUCCESS;
+    }
+
+    private function publishStubs(): void
+    {
+        $listenerPath = app_path('Listeners/ActivateSubbaseSubscription.php');
+
+        if (! file_exists($listenerPath)) {
+            $dir = dirname($listenerPath);
+            if (! is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+
+            $stub = <<<'PHP'
+<?php
+
+namespace App\Listeners;
+
+use Illuminate\Support\Facades\Event;
+use Nafiswatsiq\SubbasePayment\Events\PaymentReceived;
+
+class ActivateSubbaseSubscription
+{
+    public function handle(PaymentReceived $event): void
+    {
+        $payment = $event->paymentRecord;
+        $planId = $event->metadata['plan_id'] ?? null;
+        $userId = $event->metadata['user_id'] ?? null;
+
+        $userModel = config('auth.providers.users.model', \App\Models\User::class);
+        $user = $userId ? $userModel::find($userId) : null;
+
+        if (! $user) {
+            return;
+        }
+
+        $planModel = config('subbase.models.plan', \Nafiswatsiq\Subbase\Models\Plan::class);
+        $plan = $planModel::find($planId);
+
+        if ($plan && method_exists($user, 'newPlanSubscription')) {
+            if ($payment->subscription_id) {
+                return;
+            }
+
+            $subscription = $user->newPlanSubscription('default', $plan);
+
+            \Illuminate\Support\Facades\DB::table(config('subbase-payment.tables.subscription_payments', 'subscription_payments'))
+                ->where('id', $payment->id)
+                ->update(['subscription_id' => $subscription->id]);
+        }
+    }
+}
+PHP;
+            file_put_contents($listenerPath, $stub);
+            $this->info("Created listener at App\Listeners\ActivateSubbaseSubscription.");
+        }
     }
 
     private function writeDriverEnvStubs(string $driver): void

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\PaymentManager;
 use Nafiswatsiq\Subbase\Helpers\PlanPriceHelper;
@@ -22,16 +24,25 @@ class CheckoutController extends Controller
             ->firstOrFail();
 
         $currency = $planModel::currencyFromLocale(app()->getLocale());
+        $driver = app(\Nafiswatsiq\SubbasePayment\PaymentManager::class)->driver();
 
         return view('subbase-payment::checkout', [
             'plan' => $plan,
             'pricing' => PlanPriceHelper::formatWithDiscounts($plan, $currency),
             'currency' => $currency,
+            'driverName' => $driver->name(),
+            'driverLogo' => $driver->logo(),
         ]);
     }
 
     public function store(Request $request, string $plan, PaymentManager $payments)
     {
+        $user = Auth::user();
+
+        if (! $user) {
+            throw ValidationException::withMessages(['payment' => 'You must be logged in to subscribe.']);
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:255'],
@@ -43,14 +54,26 @@ class CheckoutController extends Controller
         $pricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
 
         try {
+            $returnUrl = config('subbase-payment.checkout.return_url')
+                ? (Str::startsWith(config('subbase-payment.checkout.return_url'), 'http')
+                    ? config('subbase-payment.checkout.return_url')
+                    : route(config('subbase-payment.checkout.return_url'), $plan->slug))
+                : route('subbase-payment.checkout.return', $plan->slug);
+
+            $cancelUrl = config('subbase-payment.checkout.cancel_url')
+                ? (Str::startsWith(config('subbase-payment.checkout.cancel_url'), 'http')
+                    ? config('subbase-payment.checkout.cancel_url')
+                    : route(config('subbase-payment.checkout.cancel_url'), $plan->slug))
+                : route('subbase-payment.checkout.cancel', $plan->slug);
+
             $result = $payments->driver()->charge(new PaymentRequest(
                 $plan,
                 number_format((float) $pricing['final_amount'], 2, '.', ''),
                 $currency,
                 $request->string('name')->toString(),
                 $request->string('email')->toString(),
-                route('subbase-payment.checkout.return', $plan->slug),
-                route('subbase-payment.checkout.cancel', $plan->slug),
+                $returnUrl,
+                $cancelUrl,
             ));
         } catch (\Throwable $exception) {
             report($exception);
@@ -65,7 +88,11 @@ class CheckoutController extends Controller
             'customer_email' => $request->string('email')->toString(),
             'amount' => $pricing['final_amount'],
             'currency' => $currency,
-            'metadata' => json_encode(['plan_id' => $plan->getKey(), 'plan_slug' => $plan->slug]),
+            'metadata' => json_encode([
+                'plan_id' => $plan->getKey(),
+                'plan_slug' => $plan->slug,
+                'user_id' => $user->getAuthIdentifier(),
+            ]),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -73,13 +100,72 @@ class CheckoutController extends Controller
         return redirect()->away($result->approvalUrl);
     }
 
-    public function returned(string $plan)
+    public function returned(Request $request, string $plan, PaymentManager $payments)
     {
+        $orderId = $request->string('token')->toString();
+        $user = Auth::user();
+
+        if ($user && $orderId) {
+            $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
+            $payment = DB::table($table)
+                ->where('gateway_transaction_id', $orderId)
+                ->where('payment_status', 'pending')
+                ->first();
+            $metadata = $payment && is_string($payment->metadata)
+                ? (json_decode($payment->metadata, true) ?? [])
+                : [];
+
+            if ($payment && (string) ($metadata['user_id'] ?? '') === (string) $user->getAuthIdentifier()) {
+                try {
+                    $driver = $payments->driver();
+
+                    if ($driver instanceof \Nafiswatsiq\SubbasePayment\Contracts\CapturesPayments) {
+                        $capture = $driver->capture($orderId);
+
+                        if ($capture->status === 'paid') {
+                            $updated = DB::transaction(function () use ($table, $payment): ?object {
+                                $updated = DB::table($table)
+                                    ->where('id', $payment->id)
+                                    ->where('payment_status', 'pending')
+                                    ->update([
+                                        'payment_status' => 'paid',
+                                        'verified_at' => now(),
+                                        'updated_at' => now(),
+                                    ]);
+
+                                return $updated ? DB::table($table)->where('id', $payment->id)->first() : null;
+                            });
+
+                            if ($updated) {
+                                event(new \Nafiswatsiq\SubbasePayment\Events\PaymentReceived($updated, $metadata));
+                            }
+                        }
+                    }
+                } catch (\Throwable $exception) {
+                    report($exception);
+                }
+            }
+        }
+
+        $returnUrl = config('subbase-payment.checkout.return_url');
+        if ($returnUrl) {
+            return Str::startsWith($returnUrl, 'http')
+                ? redirect()->away($returnUrl)
+                : redirect()->route($returnUrl, $plan);
+        }
+
         return view('subbase-payment::status', ['plan' => $plan, 'status' => 'pending']);
     }
 
     public function canceled(string $plan)
     {
+        $cancelUrl = config('subbase-payment.checkout.cancel_url');
+        if ($cancelUrl) {
+            return Str::startsWith($cancelUrl, 'http')
+                ? redirect()->away($cancelUrl)
+                : redirect()->route($cancelUrl, $plan);
+        }
+
         return view('subbase-payment::status', ['plan' => $plan, 'status' => 'canceled']);
     }
 }

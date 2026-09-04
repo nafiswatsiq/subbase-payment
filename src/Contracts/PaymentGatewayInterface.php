@@ -12,4 +12,8 @@ interface PaymentGatewayInterface
     public function cancel(string $transactionId): PaymentResult;
 
     public function handleWebhook(array $payload, array $headers = []): PaymentResult;
+
+    public function name(): string;
+
+    public function logo(): ?string;
 }

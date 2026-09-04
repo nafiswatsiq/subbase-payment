@@ -32,7 +32,7 @@
                         @endforeach
                     </div>
                     </div>
-                    <p class="mt-auto pt-12 text-xs text-gray-400">Simple plans. Clear pricing. No surprises.</p>
+                    <p class="mt-auto pt-12 text-xs text-gray-400">Secure payments. Fast checkout. No hidden fees.</p>
                 </div>
             </section>
 
@@ -46,9 +46,16 @@
                 </div>
 
                 <div class="mt-8 flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-                    <div>
-                        <p class="text-sm font-semibold text-gray-900">{{ $plan->name }}</p>
-                        <p class="mt-1 text-xs text-gray-500">Billed securely via your selected provider</p>
+                    <div class="flex items-center gap-3">
+                        @if($driverLogo)
+                            <img src="{{ $driverLogo }}" alt="{{ $driverName }}" class="h-8 w-auto rounded-lg bg-white p-1" />
+                        @else
+                            <span class="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600">{{ substr($driverName, 0, 1) }}</span>
+                        @endif
+                        <div>
+                            <p class="text-sm font-semibold text-gray-900">{{ $plan->name }}</p>
+                            <p class="mt-1 text-xs text-gray-500">Billed securely via {{ $driverName }}</p>
+                        </div>
                     </div>
                     <div class="text-right">
                         <p class="text-xl font-bold tracking-tight text-gray-900">{{ $pricing['final_price'] }}</p>
@@ -95,6 +102,9 @@
                     <span class="text-blue-600">&#10003;</span>
                     Secure checkout
                     <span class="text-gray-300">|</span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
                     Your information is protected
                 </div>
             </section>
