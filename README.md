@@ -40,15 +40,37 @@ links each plan to the public checkout page:
 /checkout/{plan-slug}
 ```
 
+Use the component without a `subscribe-route` prop:
+
+```blade
+<x-subbase::plan-list />
+```
+
+The registered route name is `subbase-payment.checkout`. If you need a custom
+checkout flow, define a named route and pass that registered name to the
+component. Do not use an example name such as `your.custom.checkout.route`
+unless you have defined that route in your application.
+
 The page reads the configured Subbase plan model, displays its features and
 locale-aware price, and collects the customer's name and email before payment.
 Set `subbase-payment.checkout.path` or `subbase-payment.checkout.middleware`
 to customize the route.
 
-## PayPal
+## Payment Drivers
 
-Choose the driver and configure PayPal credentials. Sandbox is the default;
-use `https://api-m.paypal.com` for production.
+Payment gateway configuration is handled per driver. Each driver has its own documentation guide with installation steps, environment variables, and webhook setup:
+
+- **[PayPal Driver Guide](docs/drivers/paypal.md)** — PayPal REST API integration.
+- **[Custom Gateway Guide](docs/drivers/custom.md)** — Implement your own payment gateway driver.
+
+### Quick Setup
+
+```bash
+# Install with PayPal driver
+php artisan subbase-payment:install --driver=paypal
+```
+
+The command writes `SUBBASE_PAYMENT_DRIVER` and all required driver environment variables to `.env`:
 
 ```env
 SUBBASE_PAYMENT_DRIVER=paypal
@@ -58,41 +80,11 @@ PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
 PAYPAL_WEBHOOK_ID=your-webhook-id
 ```
 
-Register the webhook URL in PayPal as:
+For non-interactive or CI environments:
 
-```text
-https://your-app.example/subbase-payment/webhook
+```bash
+php artisan subbase-payment:install --driver=paypal --no-interaction
 ```
-For PayPal, configure `PAYPAL_WEBHOOK_ID` and register
-`https://your-app.example/subbase-payment/webhook` in the PayPal dashboard.
-The webhook verifies the signature through PayPal before changing a payment to
-`paid`; browser redirects never activate a subscription.
-
-PayPal signatures are verified through PayPal's verification API. The webhook
-maps provider events to `pending`, `paid`, `failed`, or `canceled`, updates the
-configured payment table by transaction ID, and ignores duplicate event IDs.
-The customer return URL is not treated as proof of payment. The current release
-does not yet create or activate a Subbase subscription from a successful
-payment; application code must perform that lifecycle step after verification.
-
-The webhook must be publicly reachable over HTTPS. Do not put it behind the
-`web` middleware group if that group enables CSRF protection.
-
-## Adding gateways
-
-Implement `PaymentGatewayInterface`, return the package `PaymentResult` DTO,
-and register the gateway in a service provider:
-
-```php
-$this->app->make(PaymentManager::class)->register('custom', new CustomGateway());
-```
-Additional gateways implement `PaymentGatewayInterface` and map their provider
-events to the same `PaymentResult` statuses. Register them on `PaymentManager`
-from the gateway package's service provider, then select the driver with
-`SUBBASE_PAYMENT_DRIVER`.
-
-The gateway is responsible for authenticating and verifying its own webhook
-signature. Set `SUBBASE_PAYMENT_DRIVER=custom` after registration.
 
 ## Configuration
 
