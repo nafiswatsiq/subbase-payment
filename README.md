@@ -113,7 +113,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 
 ## Payment Drivers
 
-| Logo | Driver | Guide |
+| Payment | Payment Driver | Guide |
 |:---:|--------|-------|
 | <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | [**PayPal**](docs/drivers/paypal.md) | Credentials, webhook setup, sandbox/production, troubleshooting |
 | <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | [**Stripe**](docs/drivers/stripe.md) | Credentials, Checkout Sessions, webhook setup, sandbox/production |
