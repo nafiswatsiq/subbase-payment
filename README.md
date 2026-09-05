@@ -1,5 +1,9 @@
 # Subbase Payment
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/nafiswatsiq/subbase-payment.svg?include_prereleases)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/nafiswatsiq/subbase-payment.svg)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
+
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
 > **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Xendit Gateway](docs/drivers/xendit.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
@@ -10,8 +14,17 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 
 ```bash
 composer require nafiswatsiq/subbase-payment
+```
+
+```bash
 php artisan vendor:publish --tag=subbase-payment-config
+```
+
+```bash
 php artisan subbase-payment:install --driver=paypal
+```
+
+```bash
 php artisan migrate
 ```
 
@@ -192,3 +205,14 @@ composer test
 ```
 
 ---
+
+## Support
+
+- 📖 Documentation: [GitHub Wiki](https://github.com/nafiswatsiq/subbase-payment/wiki)
+- 🐛 Issues: [GitHub Issues](https://github.com/nafiswatsiq/subbase-payment/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/nafiswatsiq/subbase-payment/discussions)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
