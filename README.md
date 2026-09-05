@@ -2,7 +2,7 @@
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [PayPal Driver](docs/drivers/paypal.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [PayPal Driver](docs/drivers/paypal.md) · [Midtrans Driver](docs/drivers/midtrans.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
 
 ---
 
@@ -10,6 +10,7 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 
 - Public checkout flow at `/checkout/{plan-slug}`
 - PayPal REST driver (no SDK required — uses Laravel HTTP client)
+- Midtrans Snap driver (no SDK required — uses Laravel HTTP client)
 - Gateway-agnostic webhook contract — add gateways without touching controllers
 - Independent `subscription_payments` table (configurable name)
 - Webhook logging (`payment_webhook_logs` table)

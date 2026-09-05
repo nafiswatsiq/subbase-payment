@@ -122,7 +122,7 @@ class WebhookController extends Controller
                 'error_message' => 'Payment transaction was not found.',
             ]);
 
-            return response()->json(['message' => 'Payment transaction was not found.'], 404);
+            return response()->json(['message' => 'Payment transaction was not found.'], 200);
         }
 
         return response()->json(['ok' => true]);

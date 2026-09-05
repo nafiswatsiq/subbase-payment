@@ -2,7 +2,7 @@
 
 return [
     'navigation_label' => 'Log Webhook',
-    'navigation_group' => 'Subscriptions',
+    'navigation_group' => 'Paket Langganan',
 
     'basic_information' => 'Informasi Webhook',
     'headers' => 'Request Headers',

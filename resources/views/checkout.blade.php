@@ -69,7 +69,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('subbase-payment.checkout.store', $plan->slug) }}" class="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg shadow-gray-900/5 sm:p-7">
+                <form method="POST" action="{{ route('subbase-payment.checkout.store', $plan->slug) }}" target="subbase_payment_popup" onsubmit="window.open('about:blank', 'subbase_payment_popup', 'width=580,height=700,top=' + Math.max(0, (screen.height - 700) / 2) + ',left=' + Math.max(0, (screen.width - 580) / 2) + ',resizable=yes,scrollbars=yes');" class="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg shadow-gray-900/5 sm:p-7">
                     @csrf
                     <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-5">
                         <span class="grid h-9 w-9 place-items-center rounded-full bg-blue-500 text-sm font-bold text-white">1</span>
@@ -95,7 +95,7 @@
                             Continue to payment
                             <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
                         </button>
-                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">You will be redirected to the selected payment provider.</p>
+                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">You will be redirected to the selected payment provider in a new window.</p>
                     </div>
                 </form>
                 <div class="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-gray-500">

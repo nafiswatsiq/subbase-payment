@@ -32,5 +32,9 @@ return [
             'base_url' => env('PAYPAL_BASE_URL', 'https://api-m.sandbox.paypal.com'),
             'webhook_id' => env('PAYPAL_WEBHOOK_ID'),
         ],
+        'midtrans' => [
+            'server_key' => env('MIDTRANS_SERVER_KEY'),
+            'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+        ],
     ],
 ];

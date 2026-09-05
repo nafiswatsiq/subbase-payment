@@ -38,8 +38,10 @@ class PaymentWebhookLogForm
                 Section::make(__('subbase-payment::subbase-payment/webhook.payload'))
                     ->columnSpanFull()
                     ->schema([
-                        KeyValue::make('payload')
-                            ->label(__('subbase-payment::subbase-payment/webhook.payload')),
+                        Textarea::make('payload')
+                            ->label(__('subbase-payment::subbase-payment/webhook.payload'))
+                            ->formatStateUsing(fn ($state) => is_array($state) || is_object($state) ? json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : (string) $state)
+                            ->rows(12),
                     ]),
                 Section::make(__('subbase-payment::subbase-payment/webhook.error_information'))
                     ->columnSpanFull()

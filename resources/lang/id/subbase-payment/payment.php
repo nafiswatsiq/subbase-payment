@@ -2,7 +2,7 @@
 
 return [
     'navigation_label' => 'Riwayat Pembayaran',
-    'navigation_group' => 'Subscriptions',
+    'navigation_group' => 'Paket Langganan',
     'subscription_payment' => 'Riwayat Pembayaran',
 
     'basic_information' => 'Informasi Pembayaran',

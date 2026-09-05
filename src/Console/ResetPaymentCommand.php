@@ -17,6 +17,10 @@ class ResetPaymentCommand extends Command
             'PAYPAL_BASE_URL',
             'PAYPAL_WEBHOOK_ID',
         ],
+        'midtrans' => [
+            'MIDTRANS_SERVER_KEY',
+            'MIDTRANS_IS_PRODUCTION',
+        ],
     ];
 
     public function handle(): int

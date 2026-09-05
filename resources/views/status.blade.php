@@ -48,5 +48,14 @@
         </a>
         <p class="mt-5 text-center text-xs text-gray-400">Secure checkout powered by {{ config('app.name') }}</p>
     </main>
+
+    <script>
+        if (window.opener && !window.opener.closed) {
+            try {
+                window.opener.location.href = window.location.href;
+                window.close();
+            } catch (e) {}
+        }
+    </script>
 </body>
 </html>

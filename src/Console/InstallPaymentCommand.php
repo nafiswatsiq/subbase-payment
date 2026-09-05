@@ -21,9 +21,13 @@ class InstallPaymentCommand extends Command
             'PAYPAL_BASE_URL' => 'https://api-m.sandbox.paypal.com',
             'PAYPAL_WEBHOOK_ID' => 'your-webhook-id',
         ],
+        'midtrans' => [
+            'MIDTRANS_SERVER_KEY' => 'your-server-key',
+            'MIDTRANS_IS_PRODUCTION' => 'false',
+        ],
     ];
 
-    protected array $availableDrivers = ['paypal'];
+    protected array $availableDrivers = ['paypal', 'midtrans'];
 
     public function handle(): int
     {
