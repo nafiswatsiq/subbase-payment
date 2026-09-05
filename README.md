@@ -12,6 +12,8 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 - PayPal REST driver (no SDK required — uses Laravel HTTP client)
 - Gateway-agnostic webhook contract — add gateways without touching controllers
 - Independent `subscription_payments` table (configurable name)
+- Webhook logging (`payment_webhook_logs` table)
+- Filament resources (`SubscriptionPaymentResource` & `PaymentWebhookLogResource`) & plugin panel support (`SubbasePaymentPlugin`)
 
 ---
 

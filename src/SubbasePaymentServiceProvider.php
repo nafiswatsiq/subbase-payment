@@ -14,12 +14,14 @@ class SubbasePaymentServiceProvider extends PackageServiceProvider
         $package
             ->name('subbase-payment')
             ->hasConfigFile('subbase-payment')
+            ->hasTranslations()
             ->hasViews('subbase-payment')
             ->hasRoutes(['web', 'webhook'])
             ->hasCommands([InstallPaymentCommand::class])
             ->runsMigrations()
             ->hasMigrations([
                 'create_subscription_payments_table',
+                'create_payment_webhook_logs_table',
             ]);
     }
 

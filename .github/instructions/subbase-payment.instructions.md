@@ -24,6 +24,8 @@ Work in the following small slices and validate each slice before continuing:
    - Add a separate package `composer.json` with `nafiswatsiq/subbase` as a required dependency.
    - Register the service provider through Composer auto-discovery.
    - Put code under the `Nafiswatsiq\\SubbasePayment` namespace and separate `config`, `database`, `routes`, and `src`.
+   - Provide `SubbasePaymentPlugin` to register Filament resources (e.g. `SubscriptionPaymentResource`).
+   - Use `SubbasePaymentPermission::allows()` for authorization checks in Filament resources.
    - Add the test runner and installation documentation early.
 
 2. **Contract and manager**

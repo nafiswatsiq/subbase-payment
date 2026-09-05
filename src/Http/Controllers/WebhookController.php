@@ -7,32 +7,69 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
+use Nafiswatsiq\SubbasePayment\Models\PaymentWebhookLog;
 use Nafiswatsiq\SubbasePayment\PaymentManager;
 
 class WebhookController extends Controller
 {
     public function __invoke(Request $request, PaymentManager $payments): JsonResponse
     {
+        $driverName = config('subbase-payment.driver', 'unknown');
+        $rawPayload = $request->json()->all();
+        $rawHeaders = collect($request->headers->all())
+            ->mapWithKeys(fn (array $value, string $key): array => [strtolower($key) => $value[0] ?? ''])
+            ->all();
+
+        $log = PaymentWebhookLog::create([
+            'gateway_driver' => $driverName,
+            'event_id' => $rawPayload['id'] ?? $rawPayload['event_id'] ?? null,
+            'event_type' => $rawPayload['event_type'] ?? $rawPayload['type'] ?? null,
+            'status' => 'received',
+            'payload' => $rawPayload,
+            'headers' => $rawHeaders,
+        ]);
+
         try {
             $result = $payments->driver()->handleWebhook(
-                $request->json()->all(),
-                collect($request->headers->all())
-                    ->mapWithKeys(fn (array $value, string $key): array => [strtolower($key) => $value[0] ?? ''])
-                    ->all(),
+                $rawPayload,
+                $rawHeaders,
             );
-        } catch (InvalidWebhookSignatureException) {
+        } catch (InvalidWebhookSignatureException $e) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => 'Invalid webhook signature: ' . $e->getMessage(),
+            ]);
+
             return response()->json(['message' => 'Invalid webhook signature.'], 401);
+        } catch (\Throwable $e) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+
+        $eventId = $result->data['event_id'] ?? $log->event_id;
+        if ($eventId) {
+            $log->update([
+                'event_id' => $eventId,
+                'event_type' => $result->data['event_type'] ?? $log->event_type,
+            ]);
         }
 
         $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
-        $eventId = $result->data['event_id'] ?? null;
 
         if ($eventId && DB::table($table)->where('webhook_event_id', $eventId)->exists()) {
+            $log->update(['status' => 'duplicate']);
+
             return response()->json(['ok' => true]);
         }
 
-        $found = DB::transaction(function () use ($table, $result, $eventId): bool {
+        $found = DB::transaction(function () use ($table, $result, $eventId, $log): bool {
             if ($eventId && DB::table($table)->where('webhook_event_id', $eventId)->exists()) {
+                $log->update(['status' => 'duplicate']);
+
                 return true;
             }
 
@@ -63,10 +100,17 @@ class WebhookController extends Controller
                 event(new \Nafiswatsiq\SubbasePayment\Events\PaymentReceived($updatedRecord, $metadata));
             }
 
+            $log->update(['status' => 'verified']);
+
             return true;
         });
 
         if (! $found) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => 'Payment transaction was not found.',
+            ]);
+
             return response()->json(['message' => 'Payment transaction was not found.'], 404);
         }
 

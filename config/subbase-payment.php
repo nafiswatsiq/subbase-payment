@@ -12,6 +12,12 @@ return [
 
     'tables' => [
         'subscription_payments' => 'subscription_payments',
+        'payment_webhook_logs' => 'payment_webhook_logs',
+    ],
+
+    'permissions' => [
+        'subscription_payment' => null,
+        'payment_webhook_log' => null,
     ],
 
     'webhook' => [
