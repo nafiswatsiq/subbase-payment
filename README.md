@@ -34,6 +34,18 @@ php artisan subbase-payment:install --driver=paypal --no-interaction
 The install command writes `SUBBASE_PAYMENT_DRIVER=paypal` + required env vars to `.env`.  
 Service provider auto-registers. Disable by removing package or leaving `SUBBASE_PAYMENT_DRIVER` unset.
 
+### Reset / Switch Driver
+
+Reset driver configuration and remove driver env keys:
+```bash
+php artisan subbase-payment:reset
+```
+
+Reset and immediately configure/switch to another driver:
+```bash
+php artisan subbase-payment:reset --driver=paypal --force
+```
+
 ---
 
 ## Public Checkout

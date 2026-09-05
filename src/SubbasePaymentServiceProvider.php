@@ -3,6 +3,7 @@
 namespace Nafiswatsiq\SubbasePayment;
 
 use Nafiswatsiq\SubbasePayment\Console\InstallPaymentCommand;
+use Nafiswatsiq\SubbasePayment\Console\ResetPaymentCommand;
 use Nafiswatsiq\SubbasePayment\Gateways\PaypalGateway;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -17,7 +18,10 @@ class SubbasePaymentServiceProvider extends PackageServiceProvider
             ->hasTranslations()
             ->hasViews('subbase-payment')
             ->hasRoutes(['web', 'webhook'])
-            ->hasCommands([InstallPaymentCommand::class])
+            ->hasCommands([
+                InstallPaymentCommand::class,
+                ResetPaymentCommand::class,
+            ])
             ->runsMigrations()
             ->hasMigrations([
                 'create_subscription_payments_table',
