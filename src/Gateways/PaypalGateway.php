@@ -84,6 +84,7 @@ class PaypalGateway implements PaymentGatewayInterface, CapturesPayments
 
         $eventType = (string) ($payload['event_type'] ?? '');
         $status = match ($eventType) {
+            'CHECKOUT.ORDER.APPROVED' => 'approved',
             'PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED', 'CHECKOUT.PAYMENT-RESOURCE.PAYMENT-COMPLETED' => 'paid',
             'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED' => 'failed',
             'PAYMENT.CAPTURE.REVERSED', 'PAYMENT.CAPTURE.REFUNDED' => 'canceled',

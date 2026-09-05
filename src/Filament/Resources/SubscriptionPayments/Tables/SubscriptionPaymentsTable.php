@@ -40,6 +40,8 @@ class SubscriptionPaymentsTable
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'paid' => 'success',
+                        'completed' => 'info',
+                        'approved' => 'info',
                         'pending' => 'warning',
                         'failed' => 'danger',
                         'canceled' => 'gray',
@@ -69,6 +71,8 @@ class SubscriptionPaymentsTable
                     ->label(__('subbase-payment::subbase-payment/payment.status'))
                     ->options([
                         'pending' => 'Pending',
+                        'approved' => 'Approved',
+                        'completed' => 'Completed',
                         'paid' => 'Paid',
                         'failed' => 'Failed',
                         'canceled' => 'Canceled',

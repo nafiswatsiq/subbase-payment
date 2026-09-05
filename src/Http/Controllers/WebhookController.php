@@ -82,19 +82,30 @@ class WebhookController extends Controller
                 return false;
             }
 
+            $isPaid = $payment->payment_status === 'paid';
+            $isFinal = in_array($payment->payment_status, ['paid', 'failed', 'canceled'], true);
+
+            $shouldUpdateStatus = true;
+            if ($isFinal && in_array($result->status, ['pending', 'approved', 'completed'], true)) {
+                $shouldUpdateStatus = false;
+            }
+
             $updates = [
-                'payment_status' => $result->status,
                 'webhook_event_id' => $eventId,
                 'updated_at' => now(),
             ];
 
-            if ($result->status === 'paid') {
+            if ($shouldUpdateStatus) {
+                $updates['payment_status'] = $result->status;
+            }
+
+            if ($result->status === 'paid' && ! $payment->verified_at) {
                 $updates['verified_at'] = now();
             }
 
             DB::table($table)->where('id', $payment->id)->update($updates);
 
-            if ($result->status === 'paid') {
+            if ($result->status === 'paid' && ! $isPaid) {
                 $updatedRecord = DB::table($table)->where('id', $payment->id)->first();
                 $metadata = is_string($updatedRecord->metadata ?? null) ? (json_decode($updatedRecord->metadata, true) ?? []) : [];
                 event(new \Nafiswatsiq\SubbasePayment\Events\PaymentReceived($updatedRecord, $metadata));

@@ -109,7 +109,7 @@ class CheckoutController extends Controller
             $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
             $payment = DB::table($table)
                 ->where('gateway_transaction_id', $orderId)
-                ->where('payment_status', 'pending')
+                ->whereIn('payment_status', ['pending', 'approved'])
                 ->first();
             $metadata = $payment && is_string($payment->metadata)
                 ? (json_decode($payment->metadata, true) ?? [])
@@ -123,22 +123,16 @@ class CheckoutController extends Controller
                         $capture = $driver->capture($orderId);
 
                         if ($capture->status === 'paid') {
-                            $updated = DB::transaction(function () use ($table, $payment): ?object {
-                                $updated = DB::table($table)
+                            DB::transaction(function () use ($table, $payment): void {
+                                DB::table($table)
                                     ->where('id', $payment->id)
-                                    ->where('payment_status', 'pending')
+                                    ->whereIn('payment_status', ['pending', 'approved'])
+                                    ->lockForUpdate()
                                     ->update([
-                                        'payment_status' => 'paid',
-                                        'verified_at' => now(),
+                                        'payment_status' => 'completed',
                                         'updated_at' => now(),
                                     ]);
-
-                                return $updated ? DB::table($table)->where('id', $payment->id)->first() : null;
                             });
-
-                            if ($updated) {
-                                event(new \Nafiswatsiq\SubbasePayment\Events\PaymentReceived($updated, $metadata));
-                            }
                         }
                     }
                 } catch (\Throwable $exception) {

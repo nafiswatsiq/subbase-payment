@@ -33,6 +33,8 @@ class SubscriptionPaymentForm
                             ->label(__('subbase-payment::subbase-payment/payment.status'))
                             ->options([
                                 'pending' => 'Pending',
+                                'approved' => 'Approved',
+                                'completed' => 'Completed',
                                 'paid' => 'Paid',
                                 'failed' => 'Failed',
                                 'canceled' => 'Canceled',
