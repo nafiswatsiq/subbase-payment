@@ -119,38 +119,6 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 | <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans" align="center"> **Midtrans** | [docs/drivers/midtrans.md](docs/drivers/midtrans.md) — credentials, Snap setup, notification URL, sandbox/production |
 | ⚙️ **Custom** | [docs/drivers/custom.md](docs/drivers/custom.md) — implement `PaymentGatewayInterface`, register on `PaymentManager` |
 
-### Quick PayPal Setup
-
-```bash
-php artisan subbase-payment:install --driver=paypal
-```
-
-Writes to `.env`:
-```env
-SUBBASE_PAYMENT_DRIVER=paypal
-PAYPAL_CLIENT_ID=your-client-id
-PAYPAL_SECRET=your-secret
-PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
-PAYPAL_WEBHOOK_ID=your-webhook-id
-```
-
-### Quick Midtrans Setup
-
-```bash
-php artisan subbase-payment:install --driver=midtrans
-```
-
-Writes to `.env`:
-```env
-SUBBASE_PAYMENT_DRIVER=midtrans
-MIDTRANS_MERCHANT_ID=your-merchant-id
-MIDTRANS_CLIENT_KEY=your-client-key
-MIDTRANS_SERVER_KEY=your-server-key
-MIDTRANS_IS_PRODUCTION=false
-MIDTRANS_IS_SANITIZED=true
-MIDTRANS_IS_3DS=true
-```
-
 ---
 
 ## Configuration
