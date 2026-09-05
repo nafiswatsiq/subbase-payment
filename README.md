@@ -111,7 +111,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 
 ---
 
-## Payment Drivers
+## Payment Driver & Documentation
 
 | Payment | Payment Driver | Guide |
 |:---:|--------|-------|
