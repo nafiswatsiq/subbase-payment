@@ -40,6 +40,7 @@ Work in the following small slices and validate each slice before continuing:
    - Read price, currency, plan, and subscription data through the existing `subbase` model APIs. Do not assume a single currency.
    - Store transaction identifiers and checkout URLs as stable data, not SDK objects.
    - Declare gateway SDKs as Composer `suggest`/optional dependencies where appropriate; document the package required by each driver.
+   - Stripe uses Checkout Sessions (hosted payment page) with HMAC-SHA256 webhook signature verification; amounts are converted to minor units with zero-decimal currency handling.
 
 4. **Smart installer**
    - Create `InstallPaymentCommand` with a `--driver` option and a non-interactive mode suitable for CI.

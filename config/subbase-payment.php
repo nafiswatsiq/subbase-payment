@@ -36,5 +36,9 @@ return [
             'server_key' => env('MIDTRANS_SERVER_KEY'),
             'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
         ],
+        'stripe' => [
+            'secret_key' => env('STRIPE_SECRET_KEY'),
+            'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        ],
     ],
 ];

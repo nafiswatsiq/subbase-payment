@@ -25,9 +25,13 @@ class InstallPaymentCommand extends Command
             'MIDTRANS_SERVER_KEY' => 'your-server-key',
             'MIDTRANS_IS_PRODUCTION' => 'false',
         ],
+        'stripe' => [
+            'STRIPE_SECRET_KEY' => 'sk_test_your-secret-key',
+            'STRIPE_WEBHOOK_SECRET' => 'whsec_your-webhook-secret',
+        ],
     ];
 
-    protected array $availableDrivers = ['paypal', 'midtrans'];
+    protected array $availableDrivers = ['paypal', 'midtrans', 'stripe'];
 
     public function handle(): int
     {

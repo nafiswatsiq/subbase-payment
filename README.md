@@ -2,7 +2,7 @@
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [PayPal Gateway](docs/drivers/paypal.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [PayPal Gateway](docs/drivers/paypal.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
 
 ---
 
@@ -117,6 +117,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 |--------|-------|
 | <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal" align="center"> **PayPal** | [docs/drivers/paypal.md](docs/drivers/paypal.md) — credentials, webhook setup, sandbox/production, troubleshooting |
 | <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans" align="center"> **Midtrans** | [docs/drivers/midtrans.md](docs/drivers/midtrans.md) — credentials, Snap setup, notification URL, sandbox/production |
+| <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe" align="center"> **Stripe** | [docs/drivers/stripe.md](docs/drivers/stripe.md) — credentials, Checkout Sessions, webhook setup, sandbox/production |
 | ⚙️ **Custom** | [docs/drivers/custom.md](docs/drivers/custom.md) — implement `PaymentGatewayInterface`, register on `PaymentManager` |
 
 ---
@@ -127,7 +128,7 @@ Published `config/subbase-payment.php`:
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `driver` | `null` | Selected gateway (`paypal`, `stripe`, etc.) |
+| `driver` | `null` | Selected gateway (`paypal`, `midtrans`, `stripe`, etc.) |
 | `checkout.path` | `checkout` | Public checkout URL prefix |
 | `checkout.middleware` | `['web']` | Middleware on checkout routes |
 | `checkout.return_url` | `null` | Named route or full URL after successful payment |

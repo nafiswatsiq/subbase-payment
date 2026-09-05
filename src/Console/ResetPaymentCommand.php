@@ -21,6 +21,10 @@ class ResetPaymentCommand extends Command
             'MIDTRANS_SERVER_KEY',
             'MIDTRANS_IS_PRODUCTION',
         ],
+        'stripe' => [
+            'STRIPE_SECRET_KEY',
+            'STRIPE_WEBHOOK_SECRET',
+        ],
     ];
 
     public function handle(): int

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
+use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use Nafiswatsiq\SubbasePayment\Models\PaymentWebhookLog;
 use Nafiswatsiq\SubbasePayment\PaymentManager;
 
@@ -16,6 +17,7 @@ class WebhookController extends Controller
     {
         $driverName = config('subbase-payment.driver', 'unknown');
         $rawPayload = $request->json()->all();
+        $rawPayload['_raw_body'] = $request->getContent();
         $rawHeaders = collect($request->headers->all())
             ->mapWithKeys(fn (array $value, string $key): array => [strtolower($key) => $value[0] ?? ''])
             ->all();
@@ -41,6 +43,13 @@ class WebhookController extends Controller
             ]);
 
             return response()->json(['message' => 'Invalid webhook signature.'], 401);
+        } catch (PaymentConfigurationException $e) {
+            $log->update([
+                'status' => 'failed',
+                'error_message' => 'Payment configuration error: ' . $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => 'Payment configuration error: ' . $e->getMessage()], 500);
         } catch (\Throwable $e) {
             $log->update([
                 'status' => 'failed',
@@ -64,6 +73,12 @@ class WebhookController extends Controller
             $log->update(['status' => 'duplicate']);
 
             return response()->json(['ok' => true]);
+        }
+
+        if (! $result->transactionId) {
+            $log->update(['status' => 'verified']);
+
+            return response()->json(['message' => 'Webhook received and verified.'], 200);
         }
 
         $found = DB::transaction(function () use ($table, $result, $eventId, $log): bool {

@@ -6,6 +6,7 @@ use Nafiswatsiq\SubbasePayment\Console\InstallPaymentCommand;
 use Nafiswatsiq\SubbasePayment\Console\ResetPaymentCommand;
 use Nafiswatsiq\SubbasePayment\Gateways\MidtransGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\PaypalGateway;
+use Nafiswatsiq\SubbasePayment\Gateways\StripeGateway;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -43,6 +44,7 @@ class SubbasePaymentServiceProvider extends PackageServiceProvider
             $manager = new PaymentManager();
             $manager->register('paypal', new PaypalGateway());
             $manager->register('midtrans', new MidtransGateway());
+            $manager->register('stripe', new StripeGateway());
 
             return $manager;
         });
