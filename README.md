@@ -149,6 +149,20 @@ Published `config/subbase-payment.php`:
 
 ---
 
+## Publishing Assets & Views
+
+Publish configuration file:
+```bash
+php artisan vendor:publish --tag=subbase-payment-config
+```
+
+Publish Blade views (`checkout.blade.php`, `status.blade.php` to `resources/views/vendor/subbase-payment`):
+```bash
+php artisan vendor:publish --tag=subbase-payment-views
+```
+
+---
+
 ## Development
 
 ```bash
