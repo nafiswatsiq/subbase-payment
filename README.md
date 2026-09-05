@@ -2,7 +2,7 @@
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Xendit Gateway](docs/drivers/xendit.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
 
 ---
 
@@ -118,6 +118,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 | <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | [**PayPal**](docs/drivers/paypal.md) | Credentials, webhook setup, sandbox/production, troubleshooting |
 | <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | [**Stripe**](docs/drivers/stripe.md) | Credentials, Checkout Sessions, webhook setup, sandbox/production |
 | <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans"> | [**Midtrans**](docs/drivers/midtrans.md) | Credentials, Snap setup, notification URL, sandbox/production |
+| <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | [**Xendit**](docs/drivers/xendit.md) | Credentials, Invoices API setup, callback token, sandbox/production |
 | ⚙️ | [**Custom**](docs/drivers/custom.md) | Implement `PaymentGatewayInterface`, register on `PaymentManager` |
 
 ---

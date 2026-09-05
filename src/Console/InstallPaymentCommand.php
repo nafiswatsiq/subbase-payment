@@ -29,9 +29,13 @@ class InstallPaymentCommand extends Command
             'STRIPE_SECRET_KEY' => 'sk_test_your-secret-key',
             'STRIPE_WEBHOOK_SECRET' => 'whsec_your-webhook-secret',
         ],
+        'xendit' => [
+            'XENDIT_SECRET_KEY' => 'xnd_development_your-secret-key',
+            'XENDIT_WEBHOOK_VERIFICATION_TOKEN' => 'your-xendit-webhook-token',
+        ],
     ];
 
-    protected array $availableDrivers = ['paypal', 'midtrans', 'stripe'];
+    protected array $availableDrivers = ['paypal', 'midtrans', 'stripe', 'xendit'];
 
     public function handle(): int
     {

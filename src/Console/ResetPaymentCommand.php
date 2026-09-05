@@ -25,6 +25,10 @@ class ResetPaymentCommand extends Command
             'STRIPE_SECRET_KEY',
             'STRIPE_WEBHOOK_SECRET',
         ],
+        'xendit' => [
+            'XENDIT_SECRET_KEY',
+            'XENDIT_WEBHOOK_VERIFICATION_TOKEN',
+        ],
     ];
 
     public function handle(): int

@@ -44,5 +44,9 @@ return [
             'secret_key' => env('STRIPE_SECRET_KEY'),
             'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         ],
+        'xendit' => [
+            'secret_key' => env('XENDIT_SECRET_KEY'),
+            'webhook_verification_token' => env('XENDIT_WEBHOOK_VERIFICATION_TOKEN'),
+        ],
     ],
 ];

@@ -9,6 +9,7 @@ use Nafiswatsiq\SubbasePayment\Events\PaymentReceived;
 use Nafiswatsiq\SubbasePayment\Gateways\MidtransGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\PaypalGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\StripeGateway;
+use Nafiswatsiq\SubbasePayment\Gateways\XenditGateway;
 use Nafiswatsiq\SubbasePayment\Listeners\SendPaymentInvoiceListener;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -50,6 +51,7 @@ class SubbasePaymentServiceProvider extends PackageServiceProvider
             $manager->register('paypal', new PaypalGateway());
             $manager->register('midtrans', new MidtransGateway());
             $manager->register('stripe', new StripeGateway());
+            $manager->register('xendit', new XenditGateway());
 
             return $manager;
         });
