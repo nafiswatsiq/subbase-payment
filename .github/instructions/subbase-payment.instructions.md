@@ -55,6 +55,8 @@ Work in the following small slices and validate each slice before continuing:
    - Respect table and model names from `subbase` configuration; do not hard-code application models.
    - Migrations must be reversible and safe to publish repeatedly.
    - Define a minimal payment state machine (`pending`, `paid`, `failed`, `canceled`, or documented equivalents) and explicitly map gateway states to subscription states.
+   - Dispatch `PaymentReceived` event when payment is verified as `paid`.
+   - Optional email invoice sending (`subbase-payment.mail.send_invoice`) via `SendPaymentInvoiceListener` listening to `PaymentReceived`.
    - Event listeners must be idempotent, must not create duplicate charges, and must not activate a subscription before payment is verified.
    - Dispatch slow external gateway operations through queues; avoid unnecessary network calls inside database transactions.
 

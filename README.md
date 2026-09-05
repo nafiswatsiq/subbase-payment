@@ -2,7 +2,7 @@
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [PayPal Gateway](docs/drivers/paypal.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
 
 ---
 
@@ -133,9 +133,38 @@ Published `config/subbase-payment.php`:
 | `checkout.middleware` | `['web']` | Middleware on checkout routes |
 | `checkout.return_url` | `null` | Named route or full URL after successful payment |
 | `checkout.cancel_url` | `null` | Named route or full URL after canceled payment |
+| `mail.send_invoice` | `false` | Send email invoice to buyer on verified payment |
 | `webhook.path` | `subbase-payment/webhook` | Webhook endpoint path |
 | `webhook.middleware` | `[]` | Middleware on webhook (keep empty for PayPal) |
 | `gateways` | `[]` | Per-gateway config (see driver guides) |
+
+---
+
+## Email Invoices
+
+Optional email invoice sending to customer upon verified payment. Disabled by default.
+
+### Enable via `.env`
+
+Add to your `.env` file:
+```env
+SUBBASE_PAYMENT_SEND_INVOICE=true
+```
+
+### Enable via Configuration
+
+Or update `config/subbase-payment.php`:
+```php
+'mail' => [
+    'send_invoice' => true,
+],
+```
+
+The email view can be published and customized using:
+```bash
+php artisan vendor:publish --tag=subbase-payment-views
+```
+Look for `resources/views/vendor/subbase-payment/mail/invoice.blade.php`.
 
 ---
 

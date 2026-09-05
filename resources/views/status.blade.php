@@ -13,7 +13,6 @@
     <main class="relative w-full max-w-lg rounded-2xl bg-white p-7 text-gray-900 shadow-2xl shadow-black/20 ring-1 ring-white/10 sm:p-12">
         <div class="flex items-center justify-between border-b border-gray-100 pb-6">
             <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm font-bold tracking-wide text-gray-900">
-                <span class="grid h-8 w-8 place-items-center rounded-lg bg-blue-500 text-sm font-black text-white">{{ substr(config('app.name'), 0, 1) }}</span>
                 {{ config('app.name') }}
             </a>
             <span class="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-600 ring-1 ring-blue-100">Payment</span>

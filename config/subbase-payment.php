@@ -10,6 +10,10 @@ return [
         'cancel_url' => null,
     ],
 
+    'mail' => [
+        'send_invoice' => env('SUBBASE_PAYMENT_SEND_INVOICE', false),
+    ],
+
     'tables' => [
         'subscription_payments' => 'subscription_payments',
         'payment_webhook_logs' => 'payment_webhook_logs',

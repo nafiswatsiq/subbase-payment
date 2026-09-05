@@ -14,7 +14,6 @@
                 <div class="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
                 <div class="relative flex h-full flex-col">
                     <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm font-semibold tracking-wide text-gray-200">
-                        <span class="grid h-8 w-8 place-items-center rounded-lg bg-blue-500 text-sm font-black text-white">{{ substr(config('app.name'), 0, 1) }}</span>
                         {{ config('app.name') }}
                     </a>
                     <div class="mt-16 max-w-lg lg:mt-24">
