@@ -116,7 +116,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 | Driver | Guide |
 |--------|-------|
 | <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal" align="center"> **PayPal** | [docs/drivers/paypal.md](docs/drivers/paypal.md) — credentials, webhook setup, sandbox/production, troubleshooting |
-| <img src="https://assets.midtrans.com/images/logo/midtrans-logo.png" height="20" alt="Midtrans" align="center"> **Midtrans** | [docs/drivers/midtrans.md](docs/drivers/midtrans.md) — credentials, Snap setup, notification URL, sandbox/production |
+| <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans" align="center"> **Midtrans** | [docs/drivers/midtrans.md](docs/drivers/midtrans.md) — credentials, Snap setup, notification URL, sandbox/production |
 | ⚙️ **Custom** | [docs/drivers/custom.md](docs/drivers/custom.md) — implement `PaymentGatewayInterface`, register on `PaymentManager` |
 
 ### Quick PayPal Setup
