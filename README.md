@@ -2,7 +2,7 @@
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
 
 ---
 
@@ -116,8 +116,8 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 | Logo | Driver | Guide |
 |:---:|--------|-------|
 | <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | [**PayPal**](docs/drivers/paypal.md) | Credentials, webhook setup, sandbox/production, troubleshooting |
-| <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans"> | [**Midtrans**](docs/drivers/midtrans.md) | Credentials, Snap setup, notification URL, sandbox/production |
 | <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | [**Stripe**](docs/drivers/stripe.md) | Credentials, Checkout Sessions, webhook setup, sandbox/production |
+| <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans"> | [**Midtrans**](docs/drivers/midtrans.md) | Credentials, Snap setup, notification URL, sandbox/production |
 | ⚙️ | [**Custom**](docs/drivers/custom.md) | Implement `PaymentGatewayInterface`, register on `PaymentManager` |
 
 ---
@@ -128,7 +128,7 @@ Published `config/subbase-payment.php`:
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `driver` | `null` | Selected gateway (`paypal`, `midtrans`, `stripe`, etc.) |
+| `driver` | `null` | Selected gateway (`paypal`, `stripe`, `midtrans`, etc.) |
 | `checkout.path` | `checkout` | Public checkout URL prefix |
 | `checkout.middleware` | `['web']` | Middleware on checkout routes |
 | `checkout.return_url` | `null` | Named route or full URL after successful payment |
