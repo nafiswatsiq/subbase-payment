@@ -193,12 +193,12 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 
 | Payment | Payment Driver | Driver Option | Guide |
 |:---:|--------|:---:|-------|
-| <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | **PayPal** | `paypal` | [PayPal Setup Guide](docs/drivers/paypal.md) |
-| <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | **Stripe** | `stripe` | [Stripe Setup Guide](docs/drivers/stripe.md) |
-| <img src="resources/images/midtrans.png" width="20" height="20" alt="Midtrans"> | **Midtrans** | `midtrans` | [Midtrans Setup Guide](docs/drivers/midtrans.md) |
-| <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | **Xendit** | `xendit` | [Xendit Setup Guide](docs/drivers/xendit.md) |
-| <img src="resources/images/paddle.png" width="20" height="20" alt="Paddle"> | **Paddle** | `paddle` | [Paddle Setup Guide](docs/drivers/paddle.md) |
-| ⚙️ | **Custom** | `custom` | [Custom Gateway Guide](docs/drivers/custom.md) |
+| <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | **PayPal** | `paypal` | [PayPal Setup Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/paypal.md) |
+| <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | **Stripe** | `stripe` | [Stripe Setup Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/stripe.md) |
+| <img src="resources/images/midtrans.png" width="20" height="20" alt="Midtrans"> | **Midtrans** | `midtrans` | [Midtrans Setup Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/midtrans.md) |
+| <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | **Xendit** | `xendit` | [Xendit Setup Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/xendit.md) |
+| <img src="resources/images/paddle.png" width="20" height="20" alt="Paddle"> | **Paddle** | `paddle` | [Paddle Setup Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/paddle.md) |
+| ⚙️ | **Custom** | `custom` | [Custom Gateway Guide](https://github.com/nafiswatsiq/subbase-payment/blob/main/docs/drivers/custom.md) |
 
 ---
 
