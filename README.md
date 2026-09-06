@@ -1,3 +1,5 @@
+<img src="./.github/resources/banner-subbase-payment.jpg" alt="header" class="filament-hidden" />
+
 # Subbase Payment - Payment Gateway Plugin for Subbase
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nafiswatsiq/subbase-payment.svg?include_prereleases)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
