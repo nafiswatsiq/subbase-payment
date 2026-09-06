@@ -7,6 +7,7 @@ use Nafiswatsiq\SubbasePayment\Console\InstallPaymentCommand;
 use Nafiswatsiq\SubbasePayment\Console\ResetPaymentCommand;
 use Nafiswatsiq\SubbasePayment\Events\PaymentReceived;
 use Nafiswatsiq\SubbasePayment\Gateways\MidtransGateway;
+use Nafiswatsiq\SubbasePayment\Gateways\PaddleGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\PaypalGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\StripeGateway;
 use Nafiswatsiq\SubbasePayment\Gateways\XenditGateway;
@@ -52,6 +53,7 @@ class SubbasePaymentServiceProvider extends PackageServiceProvider
             $manager->register('midtrans', new MidtransGateway());
             $manager->register('stripe', new StripeGateway());
             $manager->register('xendit', new XenditGateway());
+            $manager->register('paddle', new PaddleGateway());
 
             return $manager;
         });

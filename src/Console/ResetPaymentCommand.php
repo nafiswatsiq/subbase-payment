@@ -29,6 +29,11 @@ class ResetPaymentCommand extends Command
             'XENDIT_SECRET_KEY',
             'XENDIT_WEBHOOK_VERIFICATION_TOKEN',
         ],
+        'paddle' => [
+            'PADDLE_API_KEY',
+            'PADDLE_WEBHOOK_SECRET',
+            'PADDLE_ENVIRONMENT',
+        ],
     ];
 
     public function handle(): int

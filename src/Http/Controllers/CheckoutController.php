@@ -102,7 +102,9 @@ class CheckoutController extends Controller
 
     public function returned(Request $request, string $plan, PaymentManager $payments)
     {
-        $orderId = $request->string('token')->toString();
+        $orderId = $request->string('token')->toString()
+            ?: $request->string('payment_id')->toString()
+            ?: $request->string('_ptxn')->toString();
         $user = Auth::user();
 
         if ($user && $orderId) {

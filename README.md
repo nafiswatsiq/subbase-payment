@@ -12,7 +12,7 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 
 ## Features
 
-- 💳 **Multiple Gateway Drivers** — Built-in support for PayPal, Stripe, Midtrans, and Xendit.
+- 💳 **Multiple Gateway Drivers** — Built-in support for PayPal, Stripe, Midtrans, Xendit, and Paddle.
 - ⚙️ **Custom Gateway Support** — Extensible architecture to build your own payment driver.
 - 🛒 **Hosted Public Checkout** — Modern, responsive checkout UI automatically connected with Subbase plan components.
 - 🔔 **Idempotent Webhooks** — Secure, signature-verified webhook handling to update payment status safely.
@@ -68,6 +68,7 @@ php artisan subbase-payment:install --driver=paypal
 - `stripe` — Stripe Checkout Sessions Gateway
 - `midtrans` — Midtrans Snap Gateway (Indonesia)
 - `xendit` — Xendit Invoice Gateway (SE Asia)
+- `paddle` — Paddle Billing Gateway (v2 API)
 - `custom` — Custom/Manual Gateway Driver
 
 **CI / Non-interactive setup:**
@@ -181,6 +182,7 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 | <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | **Stripe** | `stripe` | [Stripe Setup Guide](docs/drivers/stripe.md) |
 | <img src="resources/images/midtrans.png" height="18" alt="Midtrans"> | **Midtrans** | `midtrans` | [Midtrans Setup Guide](docs/drivers/midtrans.md) |
 | <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | **Xendit** | `xendit` | [Xendit Setup Guide](docs/drivers/xendit.md) |
+| <img src="resources/images/paddle.png" height="18" alt="Paddle"> | **Paddle** | `paddle` | [Paddle Setup Guide](docs/drivers/paddle.md) |
 | ⚙️ | **Custom** | `custom` | [Custom Gateway Guide](docs/drivers/custom.md) |
 
 ---

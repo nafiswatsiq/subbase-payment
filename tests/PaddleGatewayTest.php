@@ -7,33 +7,36 @@ use Illuminate\Support\Facades\Http;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
 use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
-use Nafiswatsiq\SubbasePayment\Gateways\XenditGateway;
+use Nafiswatsiq\SubbasePayment\Gateways\PaddleGateway;
 use Nafiswatsiq\Subbase\Models\Plan;
 
-class XenditGatewayTest extends TestCase
+class PaddleGatewayTest extends TestCase
 {
-    protected XenditGateway $gateway;
+    protected PaddleGateway $gateway;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->gateway = new XenditGateway();
-        Config::set('subbase-payment.gateways.xendit.secret_key', 'test_secret_key');
-        Config::set('subbase-payment.gateways.xendit.webhook_verification_token', 'test_webhook_token');
+        $this->gateway = new PaddleGateway();
+        Config::set('subbase-payment.gateways.paddle.api_key', 'pdl_api_test_key');
+        Config::set('subbase-payment.gateways.paddle.webhook_secret', 'pdl_ntf_test_secret');
+        Config::set('subbase-payment.gateways.paddle.environment', 'sandbox');
     }
 
     public function test_name_and_logo(): void
     {
-        $this->assertEquals('Xendit', $this->gateway->name());
+        $this->assertEquals('Paddle', $this->gateway->name());
         $this->assertNotEmpty($this->gateway->logo());
     }
 
     public function test_charge_success(): void
     {
         Http::fake([
-            'https://api.xendit.co/v2/invoices' => Http::response([
-                'id' => 'inv_12345',
-                'invoice_url' => 'https://checkout.xendit.co/web/inv_12345',
+            'https://sandbox-api.paddle.com/transactions' => Http::response([
+                'data' => [
+                    'id' => 'txn_01h1234567890',
+                    'url' => 'https://sandbox-checkout.paddle.com/txn_01h1234567890',
+                ],
             ], 200),
         ]);
 
@@ -42,8 +45,8 @@ class XenditGatewayTest extends TestCase
 
         $request = new PaymentRequest(
             plan: $plan,
-            amount: '100000',
-            currency: 'IDR',
+            amount: '19.99',
+            currency: 'USD',
             customerEmail: 'user@example.com',
             customerName: 'John Doe',
             returnUrl: 'https://example.com/success',
@@ -53,55 +56,66 @@ class XenditGatewayTest extends TestCase
         $result = $this->gateway->charge($request);
 
         $this->assertEquals('pending', $result->status);
-        $this->assertEquals('inv_12345', $result->transactionId);
-        $this->assertEquals('https://checkout.xendit.co/web/inv_12345', $result->approvalUrl);
+        $this->assertEquals('txn_01h1234567890', $result->transactionId);
+        $this->assertEquals('https://sandbox-checkout.paddle.com/txn_01h1234567890', $result->approvalUrl);
     }
 
     public function test_cancel_success(): void
     {
         Http::fake([
-            'https://api.xendit.co/v2/invoices/inv_12345/expire!' => Http::response([
-                'id' => 'inv_12345',
-                'status' => 'EXPIRED',
+            'https://sandbox-api.paddle.com/transactions/txn_01h1234567890/cancel' => Http::response([
+                'data' => [
+                    'id' => 'txn_01h1234567890',
+                    'status' => 'canceled',
+                ],
             ], 200),
         ]);
 
-        $result = $this->gateway->cancel('inv_12345');
+        $result = $this->gateway->cancel('txn_01h1234567890');
 
         $this->assertEquals('canceled', $result->status);
-        $this->assertEquals('inv_12345', $result->transactionId);
+        $this->assertEquals('txn_01h1234567890', $result->transactionId);
     }
 
     public function test_webhook_verification_success(): void
     {
         $payload = [
-            'id' => 'inv_12345',
-            'status' => 'PAID',
+            'event_id' => 'evt_123',
+            'event_type' => 'transaction.completed',
+            'data' => [
+                'id' => 'txn_01h1234567890',
+                'status' => 'completed',
+            ],
         ];
 
+        $ts = time();
+        $rawBody = json_encode($payload);
+        $signedPayload = $ts.':'.$rawBody;
+        $h1 = hash_hmac('sha256', $signedPayload, 'pdl_ntf_test_secret');
+
         $headers = [
-            'x-callback-token' => 'test_webhook_token',
+            'paddle-signature' => "ts={$ts};h1={$h1}",
         ];
 
         $result = $this->gateway->handleWebhook($payload, $headers);
 
         $this->assertEquals('paid', $result->status);
-        $this->assertEquals('inv_12345', $result->transactionId);
+        $this->assertEquals('txn_01h1234567890', $result->transactionId);
     }
 
     public function test_webhook_verification_failure(): void
     {
         $this->expectException(InvalidWebhookSignatureException::class);
 
-        $payload = ['id' => 'inv_12345', 'status' => 'PAID'];
-        $headers = ['x-callback-token' => ['wrong_token']];
+        $payload = ['event_id' => 'evt_123', 'event_type' => 'transaction.completed'];
+        $headers = ['paddle-signature' => 'ts=12345678;h1=invalid_hash'];
 
         $this->gateway->handleWebhook($payload, $headers);
     }
 
     public function test_missing_config_throws_exception(): void
     {
-        Config::set('subbase-payment.gateways.xendit.secret_key', null);
+        Config::set('subbase-payment.gateways.paddle.api_key', null);
 
         $this->expectException(PaymentConfigurationException::class);
 

@@ -76,9 +76,12 @@ class WebhookController extends Controller
         }
 
         if (! $result->transactionId) {
-            $log->update(['status' => 'verified']);
+            $log->update([
+                'status' => 'ignored',
+                'error_message' => null,
+            ]);
 
-            return response()->json(['message' => 'Webhook received and verified.'], 200);
+            return response()->json(['message' => 'Webhook received and ignored (no transaction_id).'], 200);
         }
 
         $found = DB::transaction(function () use ($table, $result, $eventId, $log): bool {
