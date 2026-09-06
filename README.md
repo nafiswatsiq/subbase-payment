@@ -7,11 +7,11 @@
 ### Checkout Page Preview
 <img src="./.github/resources/checkout.png" alt="Checkout" />
 
-### Invoice Mail Preview
-<img src="./.github/resources/invoice.png" alt="Invoice" />
-
 ### Payment Status Page Preview
 <img src="./.github/resources/status.png" alt="Status" />
+
+### Invoice Mail Preview
+<img src="./.github/resources/invoice.png" alt="Invoice" />
 
 ### Payment History & Webhook Logs
 <img src="./.github/resources/payment-history.png" alt="Payment History" />
