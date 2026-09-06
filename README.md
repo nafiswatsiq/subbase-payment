@@ -1,51 +1,100 @@
-# Subbase Payment
+# Subbase Payment - Payment Gateway Plugin for Subbase
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nafiswatsiq/subbase-payment.svg?include_prereleases)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/nafiswatsiq/subbase-payment.svg)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
 
-Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase).
+Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase). Out-of-the-box support for popular gateways, public checkout pages, webhook handling, and payment events for subscription activation.
 
-> **Quick links:** [Installation](#installation) · [Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [PayPal Gateway](docs/drivers/paypal.md) · [Stripe Gateway](docs/drivers/stripe.md) · [Midtrans Gateway](docs/drivers/midtrans.md) · [Xendit Gateway](docs/drivers/xendit.md) · [Custom Gateway](docs/drivers/custom.md) · [Configuration](#configuration)
+> **Quick links:** [Features](#features) · [Requirements](#requirements) · [Installation](#installation) · [Public Checkout](#public-checkout) · [Events](#events--subscription-lifecycle) · [Email Invoices](#email-invoices) · [Configuration](#configuration)
+
+---
+
+## Features
+
+- 💳 **Multiple Gateway Drivers** — Built-in support for PayPal, Stripe, Midtrans, and Xendit.
+- ⚙️ **Custom Gateway Support** — Extensible architecture to build your own payment driver.
+- 🛒 **Hosted Public Checkout** — Modern, responsive checkout UI automatically connected with Subbase plan components.
+- 🔔 **Idempotent Webhooks** — Secure, signature-verified webhook handling to update payment status safely.
+- ⚡ **Automated CLI Setup** — Interactively install, configure, reset, or switch gateway drivers via `php artisan subbase-payment:install`.
+- 📧 **Email Invoices** — Optional email receipt/invoice delivery upon verified payment completion.
+- 🔄 **Custom Redirect Flow** — Easily redirect customers to named routes or external URLs after payment.
+
+---
+
+## Requirements
+
+- PHP 8.2+
+- Laravel 13.0+
+- Filament 5.0
+- [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase) ^1.3
 
 ---
 
 ## Installation
 
+### 1. Install via Composer
+
 ```bash
 composer require nafiswatsiq/subbase-payment
 ```
+
+### 2. Publish Configuration & Migrations
 
 ```bash
 php artisan vendor:publish --tag=subbase-payment-config
 ```
 
 ```bash
+php artisan vendor:publish --tag=subbase-payment-migrations
+```
+
+### 3. Interactive Gateway Installer
+
+Run the interactive installer to configure your driver:
+
+```bash
+php artisan subbase-payment:install
+```
+
+Or pass the driver explicitly:
+
+```bash
 php artisan subbase-payment:install --driver=paypal
 ```
+
+#### Available Drivers for `--driver`:
+- `paypal` — PayPal REST API Gateway
+- `stripe` — Stripe Checkout Sessions Gateway
+- `midtrans` — Midtrans Snap Gateway (Indonesia)
+- `xendit` — Xendit Invoice Gateway (SE Asia)
+- `custom` — Custom/Manual Gateway Driver
+
+**CI / Non-interactive setup:**
+```bash
+php artisan subbase-payment:install --driver=paypal --no-interaction
+```
+
+The install command updates your `.env` file with `SUBBASE_PAYMENT_DRIVER` and the corresponding provider credentials.
+
+### 4. Run Migrations
 
 ```bash
 php artisan migrate
 ```
 
-**CI / non-interactive:**
-```bash
-php artisan subbase-payment:install --driver=paypal --no-interaction
-```
-
-The install command writes `SUBBASE_PAYMENT_DRIVER=paypal` + required env vars to `.env`.  
-Service provider auto-registers. Disable by removing package or leaving `SUBBASE_PAYMENT_DRIVER` unset.
+---
 
 ### Reset / Switch Driver
 
-Reset driver configuration and remove driver env keys:
+Reset current driver configuration and clear driver env keys:
 ```bash
 php artisan subbase-payment:reset
 ```
 
-Reset and immediately configure/switch to another driver:
+Reset and immediately switch to another driver:
 ```bash
-php artisan subbase-payment:reset --driver=paypal --force
+php artisan subbase-payment:reset --driver=stripe --force
 ```
 
 ---
@@ -126,13 +175,13 @@ Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
 
 ## Payment Driver & Documentation
 
-| Payment | Payment Driver | Guide |
-|:---:|--------|-------|
-| <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | [**PayPal**](docs/drivers/paypal.md) | Credentials, webhook setup, sandbox/production, troubleshooting |
-| <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | [**Stripe**](docs/drivers/stripe.md) | Credentials, Checkout Sessions, webhook setup, sandbox/production |
-| <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans"> | [**Midtrans**](docs/drivers/midtrans.md) | Credentials, Snap setup, notification URL, sandbox/production |
-| <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | [**Xendit**](docs/drivers/xendit.md) | Credentials, Invoices API setup, callback token, sandbox/production |
-| ⚙️ | [**Custom**](docs/drivers/custom.md) | Implement `PaymentGatewayInterface`, register on `PaymentManager` |
+| Payment | Payment Driver | Driver Option | Guide |
+|:---:|--------|:---:|-------|
+| <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" width="20" height="20" alt="PayPal"> | **PayPal** | `paypal` | [PayPal Setup Guide](docs/drivers/paypal.md) |
+| <img src="https://stripe.com/img/v3/home/twitter.png" width="20" height="20" alt="Stripe"> | **Stripe** | `stripe` | [Stripe Setup Guide](docs/drivers/stripe.md) |
+| <img src="https://midtrans.com/assets/img/logo.svg" height="18" alt="Midtrans"> | **Midtrans** | `midtrans` | [Midtrans Setup Guide](docs/drivers/midtrans.md) |
+| <img src="resources/images/xendit.png" width="20" height="20" alt="Xendit"> | **Xendit** | `xendit` | [Xendit Setup Guide](docs/drivers/xendit.md) |
+| ⚙️ | **Custom** | `custom` | [Custom Gateway Guide](docs/drivers/custom.md) |
 
 ---
 
