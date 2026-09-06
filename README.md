@@ -4,11 +4,18 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/nafiswatsiq/subbase-payment.svg)](https://packagist.org/packages/nafiswatsiq/subbase-payment)
 
-<img src="./.github/reesources/checkout.png" alt="Checkout" />
-<img src="./.github/reesources/invoice.png" alt="Invoice" />
-<img src="./.github/reesources/status.png" alt="Status" />
-<img src="./.github/reesources/payment-history.png" alt="Payment History" />
-<img src="./.github/reesources/webhook-logs.png" alt="Webhook Logs" />
+### Checkout Page Preview
+<img src="./.github/resources/checkout.png" alt="Checkout" />
+
+### Invoice Mail Preview
+<img src="./.github/resources/invoice.png" alt="Invoice" />
+
+### Payment Status Page Preview
+<img src="./.github/resources/status.png" alt="Status" />
+
+### Payment History & Webhook Logs
+<img src="./.github/resources/payment-history.png" alt="Payment History" />
+<img src="./.github/resources/webhook-logs.png" alt="Webhook Logs" />
 
 Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase). Out-of-the-box support for popular gateways, public checkout pages, webhook handling, and payment events for subscription activation.
 
