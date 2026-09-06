@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $plan->name }} | Checkout</title>
+    <title>{{ $plan->name }} | {{ __('subbase-payment::subbase-payment/frontend.checkout.title') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
@@ -17,7 +17,7 @@
                         {{ config('app.name') }}
                     </a>
                     <div class="mt-16 max-w-lg lg:mt-24">
-                        <p class="text-xs font-bold uppercase tracking-[0.24em] text-blue-400">Selected plan</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.24em] text-blue-400">{{ __('subbase-payment::subbase-payment/frontend.checkout.selected_plan') }}</p>
                         <h1 class="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{{ $plan->name }}</h1>
                     @if($plan->description)
                         <p class="mt-5 max-w-md text-base leading-7 text-gray-300">{{ $plan->description }}</p>
@@ -31,17 +31,17 @@
                         @endforeach
                     </div>
                     </div>
-                    <p class="mt-auto pt-12 text-xs text-gray-400">Secure payments. Fast checkout. No hidden fees.</p>
+                    <p class="mt-auto pt-12 text-xs text-gray-400">{{ __('subbase-payment::subbase-payment/frontend.checkout.secure_tagline') }}</p>
                 </div>
             </section>
 
             <section class="bg-white px-5 py-6 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">Checkout</p>
-                        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">Complete your order</h2>
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">{{ __('subbase-payment::subbase-payment/frontend.checkout.title') }}</p>
+                        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">{{ __('subbase-payment::subbase-payment/frontend.checkout.header_title') }}</h2>
                     </div>
-                    <div class="hidden rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-600 ring-1 ring-blue-100 sm:block">Step 1 of 2</div>
+                    <div class="hidden rounded-full bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-600 ring-1 ring-blue-100 sm:block">{{ __('subbase-payment::subbase-payment/frontend.checkout.step_indicator') }}</div>
                 </div>
 
                 <div class="mt-8 flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
@@ -53,7 +53,7 @@
                         @endif
                         <div>
                             <p class="text-sm font-semibold text-gray-900">{{ $plan->name }}</p>
-                            <p class="mt-1 text-xs text-gray-500">Billed securely via {{ $driverName }}</p>
+                            <p class="mt-1 text-xs text-gray-500">{{ __('subbase-payment::subbase-payment/frontend.checkout.billed_via', ['driver' => $driverName]) }}</p>
                         </div>
                     </div>
                     <div class="text-right">
@@ -73,38 +73,38 @@
                     <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-5">
                         <span class="grid h-9 w-9 place-items-center rounded-full bg-blue-500 text-sm font-bold text-white">1</span>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">Your details</p>
-                            <p class="mt-0.5 text-xs text-gray-500">Where should we send your payment receipt?</p>
+                            <p class="text-sm font-bold text-gray-900">{{ __('subbase-payment::subbase-payment/frontend.checkout.step_1_title') }}</p>
+                            <p class="mt-0.5 text-xs text-gray-500">{{ __('subbase-payment::subbase-payment/frontend.checkout.step_1_subtitle') }}</p>
                         </div>
                     </div>
                     <div class="space-y-5">
                         <div>
-                            <label for="name" class="text-sm font-semibold text-gray-800">Full name</label>
+                            <label for="name" class="text-sm font-semibold text-gray-800">{{ __('subbase-payment::subbase-payment/frontend.checkout.full_name') }}</label>
                             <input id="name" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="Jane Smith" class="mt-2 block w-full rounded-xl border-gray-300 bg-gray-50 px-4 py-3.5 text-sm shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-blue-100" />
                         @error('name')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label for="email" class="text-sm font-semibold text-gray-800">Email address</label>
+                            <label for="email" class="text-sm font-semibold text-gray-800">{{ __('subbase-payment::subbase-payment/frontend.checkout.email_address') }}</label>
                             <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="jane@example.com" class="mt-2 block w-full rounded-xl border-gray-300 bg-gray-50 px-4 py-3.5 text-sm shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-blue-100" />
                         @error('email')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
                     </div>
                     <div class="mt-7 border-t border-gray-100 pt-6">
                         <button type="submit" class="flex w-full items-center justify-center gap-3 rounded-xl bg-gray-900 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-gray-900/15 transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            Continue to payment
+                            {{ __('subbase-payment::subbase-payment/frontend.checkout.continue_to_payment') }}
                             <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
                         </button>
-                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">You will be redirected to the selected payment provider in a new window.</p>
+                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">{{ __('subbase-payment::subbase-payment/frontend.checkout.redirect_notice') }}</p>
                     </div>
                 </form>
                 <div class="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-gray-500">
                     <span class="text-blue-600">&#10003;</span>
-                    Secure checkout
+                    {{ __('subbase-payment::subbase-payment/frontend.checkout.secure_checkout') }}
                     <span class="text-gray-300">|</span>
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
-                    Your information is protected
+                    {{ __('subbase-payment::subbase-payment/frontend.checkout.info_protected') }}
                 </div>
             </section>
         </div>

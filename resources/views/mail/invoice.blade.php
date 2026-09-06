@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Invoice Payment #{{ $payment->transaction_id ?? $payment->id }}</title>
+    <title>{{ __('subbase-payment::subbase-payment/frontend.invoice.subject', ['id' => $payment->transaction_id ?? $payment->id]) }}</title>
 </head>
 <body style="margin:0; padding:0; background-color:#f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#111827; -webkit-font-smoothing:antialiased;">
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#f9fafb; padding: 32px 16px;">
@@ -21,13 +21,13 @@
                                         </div>
                                     </td>
                                     <td align="right">
-                                        <span style="background-color:rgba(59,130,246,0.2); color:#60a5fa; font-size:12px; font-weight:700; padding:6px 12px; border-radius:9999px; text-transform:uppercase; letter-spacing:0.1em;">INVOICE PAID</span>
+                                        <span style="background-color:rgba(59,130,246,0.2); color:#60a5fa; font-size:12px; font-weight:700; padding:6px 12px; border-radius:9999px; text-transform:uppercase; letter-spacing:0.1em;">{{ __('subbase-payment::subbase-payment/frontend.invoice.badge_paid') }}</span>
                                     </td>
                                 </tr>
                             </table>
                             <div style="margin-top:32px;">
-                                <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#60a5fa;">Payment Receipt</p>
-                                <h1 style="margin:8px 0 0 0; font-size:28px; font-weight:700; tracking-tight: -0.025em; color:#ffffff;">Thank you for your payment</h1>
+                                <p style="margin:0; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#60a5fa;">{{ __('subbase-payment::subbase-payment/frontend.invoice.receipt') }}</p>
+                                <h1 style="margin:8px 0 0 0; font-size:28px; font-weight:700; tracking-tight: -0.025em; color:#ffffff;">{{ __('subbase-payment::subbase-payment/frontend.invoice.thank_you') }}</h1>
                             </div>
                         </td>
                     </tr>
@@ -39,9 +39,9 @@
                             <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
                                 <tr>
                                     <td style="font-size:14px; color:#4b5563;">
-                                        <p style="margin:0 0 4px 0;"><strong>Billed To:</strong> {{ $payment->customer_name }}</p>
-                                        <p style="margin:0 0 4px 0;"><strong>Email:</strong> {{ $payment->customer_email }}</p>
-                                        <p style="margin:0;"><strong>Date:</strong> {{ $payment->verified_at ? (\Carbon\Carbon::parse($payment->verified_at)->format('M d, Y H:i T')) : now()->format('M d, Y H:i T') }}</p>
+                                        <p style="margin:0 0 4px 0;"><strong>{{ __('subbase-payment::subbase-payment/frontend.invoice.billed_to') }}</strong> {{ $payment->customer_name }}</p>
+                                        <p style="margin:0 0 4px 0;"><strong>{{ __('subbase-payment::subbase-payment/frontend.invoice.email') }}</strong> {{ $payment->customer_email }}</p>
+                                        <p style="margin:0;"><strong>{{ __('subbase-payment::subbase-payment/frontend.invoice.date') }}</strong> {{ $payment->verified_at ? (\Carbon\Carbon::parse($payment->verified_at)->format('M d, Y H:i T')) : now()->format('M d, Y H:i T') }}</p>
                                     </td>
                                 </tr>
                             </table>
@@ -53,8 +53,8 @@
                                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                                             <tr>
                                                 <td>
-                                                    <p style="margin:0; font-size:14px; font-weight:600; color:#111827;">{{ $payment->plan_name ?? 'Subscription Plan' }}</p>
-                                                    <p style="margin:4px 0 0 0; font-size:12px; color:#6b7280;">Gateway: {{ ucfirst($payment->gateway_driver) }}</p>
+                                                    <p style="margin:0; font-size:14px; font-weight:600; color:#111827;">{{ $payment->plan_name ?? __('subbase-payment::subbase-payment/frontend.invoice.default_plan') }}</p>
+                                                    <p style="margin:4px 0 0 0; font-size:12px; color:#6b7280;">{{ __('subbase-payment::subbase-payment/frontend.invoice.gateway') }} {{ ucfirst($payment->gateway_driver) }}</p>
                                                 </td>
                                                 <td align="right" valign="top">
                                                     <p style="margin:0; font-size:18px; font-weight:700; color:#111827;">{{ $payment->currency }} {{ number_format((float)$payment->amount, 2) }}</p>
@@ -65,7 +65,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:12px 16px; background-color:#f9fafb; border-bottom-left-radius:12px; border-bottom-right-radius:12px; font-size:12px; color:#6b7280;">
-                                        <span style="font-weight:600; color:#374151;">Transaction ID:</span> {{ $payment->gateway_transaction_id ?? $payment->id }}
+                                        <span style="font-weight:600; color:#374151;">{{ __('subbase-payment::subbase-payment/frontend.invoice.transaction_id') }}</span> {{ $payment->gateway_transaction_id ?? $payment->id }}
                                     </td>
                                 </tr>
                             </table>
@@ -73,7 +73,7 @@
                             <!-- Plan Features -->
                             @if(!empty($planFeatures))
                             <div style="margin-bottom:24px; border-top:1px solid #f3f4f6; padding-top:20px;">
-                                <p style="margin:0 0 12px 0; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#6b7280;">Included Features</p>
+                                <p style="margin:0 0 12px 0; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#6b7280;">{{ __('subbase-payment::subbase-payment/frontend.invoice.included_features') }}</p>
                                 @foreach($planFeatures as $feature)
                                     <div style="font-size:14px; color:#374151; padding:4px 0;">
                                         <span style="color:#2563eb; font-weight:bold;">&#10003;</span> {{ is_array($feature) ? ($feature['name'] ?? '') : ($feature->name ?? $feature) }}
@@ -87,7 +87,7 @@
                                 <tr>
                                     <td align="center">
                                         <a href="{{ url('/') }}" style="display:inline-block; background-color:#0f172a; color:#ffffff; font-size:14px; font-weight:700; text-decoration:none; padding:12px 24px; border-radius:10px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);">
-                                            Go to Dashboard &rarr;
+                                            {{ __('subbase-payment::subbase-payment/frontend.invoice.go_to_dashboard') }} &rarr;
                                         </a>
                                     </td>
                                 </tr>
@@ -98,8 +98,8 @@
                     <!-- Footer -->
                     <tr>
                         <td style="background-color:#f9fafb; padding:20px 32px; border-top:1px solid #f3f4f6; text-align:center; font-size:12px; color:#9ca3af;">
-                            <p style="margin:0 0 4px 0;">Secure payment receipt powered by {{ config('app.name') }}</p>
-                            <p style="margin:0;">If you have any questions, please contact support.</p>
+                            <p style="margin:0 0 4px 0;">{{ __('subbase-payment::subbase-payment/frontend.invoice.footer_powered', ['app' => config('app.name')]) }}</p>
+                            <p style="margin:0;">{{ __('subbase-payment::subbase-payment/frontend.invoice.footer_support') }}</p>
                         </td>
                     </tr>
                 </table>
