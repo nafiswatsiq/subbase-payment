@@ -54,7 +54,33 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 composer require nafiswatsiq/subbase-payment
 ```
 
-### 2. Publish Configuration & Migrations
+### 2. Register the Filament Plugin
+
+Add `SubbasePaymentPlugin` to your Filament panel provider:
+
+```php
+use Filament\Panel;
+use Filament\PanelProvider;
+use Nafiswatsiq\SubbasePayment\SubbasePaymentPlugin;
+
+class AdminPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->plugin([
+                SubbasePlugin::make(),
+                SubbasePaymentPlugin::make()
+              ])
+            // ... rest of your panel configuration
+        ;
+    }
+}
+```
+
+This registers the payment history and webhook log resources in your Filament panel.
+
+### 3. Publish Configuration & Migrations
 
 ```bash
 php artisan vendor:publish --tag=subbase-payment-config
@@ -64,7 +90,7 @@ php artisan vendor:publish --tag=subbase-payment-config
 php artisan vendor:publish --tag=subbase-payment-migrations
 ```
 
-### 3. Interactive Gateway Installer
+### 4. Interactive Gateway Installer
 
 Run the interactive installer to configure your driver:
 
@@ -93,7 +119,7 @@ php artisan subbase-payment:install --driver=paypal --no-interaction
 
 The install command updates your `.env` file with `SUBBASE_PAYMENT_DRIVER` and the corresponding provider credentials.
 
-### 4. Run Migrations
+### 5. Run Migrations
 
 ```bash
 php artisan migrate
