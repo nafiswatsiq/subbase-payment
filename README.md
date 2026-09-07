@@ -44,6 +44,8 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 - Filament 5.0
 - [`nafiswatsiq/subbase`](https://github.com/nafiswatsiq/subbase) ^1.3
 
+> **Important:** Read the [`nafiswatsiq/subbase` documentation](https://github.com/nafiswatsiq/subbase#readme) before installing this payment plugin.
+
 ---
 
 ## Installation
@@ -53,6 +55,17 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 ```bash
 composer require nafiswatsiq/subbase-payment
 ```
+
+Because `nafiswatsiq/subbase` is installed as a Composer dependency, its
+migrations must be published explicitly once. With the current Subbase
+release, use:
+
+```bash
+php artisan subbase:upgrade --migrations
+```
+
+This publishes the additional Subbase migrations. If your installed Subbase
+release provides `subbase:install` instead, run that command before migrating.
 
 ### 2. Register the Filament Plugin
 
@@ -143,14 +156,24 @@ php artisan subbase-payment:reset --driver=stripe --force
 
 ## Public Checkout
 
-Auto-links from Subbase `<x-subbase::plan-list />` component:
+Render the pricing component in any Blade view:
+
+```blade
+{{-- resources/views/pricing.blade.php --}}
+<x-subbase::plan-list />
+```
+
+When the payment plugin is installed, it automatically uses the
+`subbase-payment.checkout` route:
 
 ```
 /checkout/{plan-slug}
 ```
 
-Route name: `subbase-payment.checkout`  
-Customize path/middleware/redirects in `config/subbase-payment.php`:
+### Checkout Configuration
+
+Customize the checkout path, middleware, and post-payment redirects in
+`config/subbase-payment.php`:
 ```php
 'checkout' => [
     'path' => 'checkout',
@@ -160,7 +183,8 @@ Customize path/middleware/redirects in `config/subbase-payment.php`:
 ],
 ```
 
-Page shows plan features, locale-aware price, collects name/email before payment.
+The default `return_url` and `cancel_url` show the built-in status page. Set a
+named route or full URL to redirect the customer elsewhere after payment.
 
 ### Custom Redirect After Payment
 
