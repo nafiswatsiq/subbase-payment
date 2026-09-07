@@ -143,25 +143,35 @@ class CheckoutController extends Controller
             }
         }
 
+        $redirectTarget = null;
         $returnUrl = config('subbase-payment.checkout.return_url');
         if ($returnUrl) {
-            return Str::startsWith($returnUrl, 'http')
-                ? redirect()->away($returnUrl)
-                : redirect()->route($returnUrl, $plan);
+            $redirectTarget = Str::startsWith($returnUrl, 'http')
+                ? $returnUrl
+                : route($returnUrl, $plan);
         }
 
-        return view('subbase-payment::status', ['plan' => $plan, 'status' => 'pending']);
+        return view('subbase-payment::status', [
+            'plan' => $plan,
+            'status' => 'pending',
+            'redirectUrl' => $redirectTarget,
+        ]);
     }
 
     public function canceled(string $plan)
     {
+        $redirectTarget = null;
         $cancelUrl = config('subbase-payment.checkout.cancel_url');
         if ($cancelUrl) {
-            return Str::startsWith($cancelUrl, 'http')
-                ? redirect()->away($cancelUrl)
-                : redirect()->route($cancelUrl, $plan);
+            $redirectTarget = Str::startsWith($cancelUrl, 'http')
+                ? $cancelUrl
+                : route($cancelUrl, $plan);
         }
 
-        return view('subbase-payment::status', ['plan' => $plan, 'status' => 'canceled']);
+        return view('subbase-payment::status', [
+            'plan' => $plan,
+            'status' => 'canceled',
+            'redirectUrl' => $redirectTarget,
+        ]);
     }
 }

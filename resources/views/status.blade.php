@@ -41,10 +41,18 @@
             {{ $status === 'pending' ? ' ' . __('subbase-payment::subbase-payment/frontend.status.next_pending') : ' ' . __('subbase-payment::subbase-payment/frontend.status.next_canceled') }}
         </div>
 
-        <a href="{{ url('/') }}" class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-gray-900/15 transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            {{ __('subbase-payment::subbase-payment/frontend.status.back_to_plans') }}
-            <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
-        </a>
+        @if(!empty($redirectUrl))
+            <a href="{{ $redirectUrl }}" class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-gray-900/15 transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                {{ __('subbase-payment::subbase-payment/frontend.status.continue_to_destination') }}
+                <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
+            </a>
+            <p id="timer-notice" class="mt-3 text-center text-xs text-gray-500 font-medium"></p>
+        @else
+            <a href="{{ url('/') }}" class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-gray-900/15 transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                {{ __('subbase-payment::subbase-payment/frontend.status.back_to_plans') }}
+                <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
+            </a>
+        @endif
         <p class="mt-5 text-center text-xs text-gray-400">{{ __('subbase-payment::subbase-payment/frontend.status.footer_secure', ['app' => config('app.name')]) }}</p>
     </main>
 
@@ -54,6 +62,32 @@
                 window.opener.location.href = window.location.href;
                 window.close();
             } catch (e) {}
+        } else {
+            @if(!empty($redirectUrl))
+                (function() {
+                    let seconds = 5;
+                    const targetUrl = @json($redirectUrl);
+                    const noticeEl = document.getElementById('timer-notice');
+                    const template = @json(__('subbase-payment::subbase-payment/frontend.status.redirecting_in'));
+
+                    function updateNotice() {
+                        if (noticeEl) {
+                            noticeEl.textContent = template.replace(':seconds', seconds);
+                        }
+                    }
+
+                    updateNotice();
+                    const interval = setInterval(function() {
+                        seconds--;
+                        if (seconds <= 0) {
+                            clearInterval(interval);
+                            window.location.href = targetUrl;
+                        } else {
+                            updateNotice();
+                        }
+                    }, 1000);
+                })();
+            @endif
         }
     </script>
 </body>
