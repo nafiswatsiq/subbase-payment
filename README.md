@@ -56,16 +56,11 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 composer require nafiswatsiq/subbase-payment
 ```
 
-Because `nafiswatsiq/subbase` is installed as a Composer dependency, its
-migrations must be published explicitly once. With the current Subbase
-release, use:
+Install Subbase and publish its migrations:
 
 ```bash
-php artisan subbase:upgrade --migrations
+php artisan subbase:install
 ```
-
-This publishes the additional Subbase migrations. If your installed Subbase
-release provides `subbase:install` instead, run that command before migrating.
 
 ### 2. Register the Filament Plugin
 
