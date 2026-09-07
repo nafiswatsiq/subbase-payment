@@ -16,6 +16,11 @@ return [
         'redirect_notice' => 'Anda akan diarahkan ke penyedia pembayaran yang dipilih di jendela baru.',
         'secure_checkout' => 'Checkout Aman',
         'info_protected' => 'Informasi Anda terlindungi',
+        'already_subscribed' => 'Anda sudah memiliki langganan aktif untuk paket ini.',
+        'renewal_notice' => 'Pembelian ini akan memperpanjang masa aktif langganan Anda.',
+        'switch_notice' => 'Pembelian ini akan mengubah paket langganan Anda yang aktif ke paket ini.',
+        'renewal_badge' => 'Perpanjangan Langganan',
+        'switch_badge' => 'Ubah Paket',
     ],
     'status' => [
         'title_pending' => 'Pembayaran Menunggu Konfirmasi',

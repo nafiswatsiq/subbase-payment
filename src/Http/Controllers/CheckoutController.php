@@ -26,12 +26,23 @@ class CheckoutController extends Controller
         $currency = $planModel::currencyFromLocale(app()->getLocale());
         $driver = app(\Nafiswatsiq\SubbasePayment\PaymentManager::class)->driver();
 
+        $user = Auth::user();
+        $subscriptionAction = 'new';
+
+        if ($user && method_exists($user, 'planSubscriptions')) {
+            $activeSub = $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first();
+            if ($activeSub) {
+                $subscriptionAction = (string) $activeSub->plan_id === (string) $plan->getKey() ? 'renew' : 'switch';
+            }
+        }
+
         return view('subbase-payment::checkout', [
             'plan' => $plan,
             'pricing' => PlanPriceHelper::formatWithDiscounts($plan, $currency),
             'currency' => $currency,
             'driverName' => $driver->name(),
             'driverLogo' => $driver->logo(),
+            'subscriptionAction' => $subscriptionAction,
         ]);
     }
 
@@ -52,6 +63,14 @@ class CheckoutController extends Controller
         $plan = $planModel::query()->where('slug', $plan)->active()->firstOrFail();
         $currency = $planModel::currencyFromLocale(app()->getLocale());
         $pricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
+
+        $subscriptionAction = 'new';
+        if (method_exists($user, 'planSubscriptions')) {
+            $activeSub = $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first();
+            if ($activeSub) {
+                $subscriptionAction = (string) $activeSub->plan_id === (string) $plan->getKey() ? 'renew' : 'switch';
+            }
+        }
 
         try {
             $returnUrl = route('subbase-payment.checkout.return', $plan->slug);
@@ -83,6 +102,7 @@ class CheckoutController extends Controller
                 'plan_id' => $plan->getKey(),
                 'plan_slug' => $plan->slug,
                 'user_id' => $user->getAuthIdentifier(),
+                'subscription_action' => $subscriptionAction,
             ]),
             'created_at' => now(),
             'updated_at' => now(),

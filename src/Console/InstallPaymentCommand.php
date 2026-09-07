@@ -111,7 +111,21 @@ class ActivateSubbaseSubscription
                 return;
             }
 
-            $subscription = $user->newPlanSubscription('default', $plan);
+            $activeSubscription = method_exists($user, 'planSubscriptions')
+                ? $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first()
+                : null;
+
+            if ($activeSubscription) {
+                if ((string) $activeSubscription->plan_id === (string) $plan->getKey()) {
+                    $activeSubscription->renew();
+                    $subscription = $activeSubscription;
+                } else {
+                    $activeSubscription->changePlan($plan);
+                    $subscription = $activeSubscription;
+                }
+            } else {
+                $subscription = $user->newPlanSubscription('default', $plan);
+            }
 
             \Illuminate\Support\Facades\DB::table(config('subbase-payment.tables.subscription_payments', 'subscription_payments'))
                 ->where('id', $payment->id)

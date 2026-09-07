@@ -62,6 +62,18 @@
                     </div>
                 </div>
 
+                @if(isset($subscriptionAction) && $subscriptionAction === 'renew')
+                    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-800">
+                        <span class="rounded-md bg-blue-600 px-2 py-0.5 font-bold text-white uppercase tracking-wider text-[10px]">{{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_badge') }}</span>
+                        <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_notice') }}</span>
+                    </div>
+                @elseif(isset($subscriptionAction) && $subscriptionAction === 'switch')
+                    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-purple-200 bg-purple-50 px-4 py-3 text-xs text-purple-800">
+                        <span class="rounded-md bg-purple-600 px-2 py-0.5 font-bold text-white uppercase tracking-wider text-[10px]">{{ __('subbase-payment::subbase-payment/frontend.checkout.switch_badge') }}</span>
+                        <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.switch_notice') }}</span>
+                    </div>
+                @endif
+
                 @if($errors->has('payment'))
                     <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="alert">
                         {{ $errors->first('payment') }}

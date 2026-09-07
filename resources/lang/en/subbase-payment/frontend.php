@@ -16,6 +16,11 @@ return [
         'redirect_notice' => 'You will be redirected to the selected payment provider in a new window.',
         'secure_checkout' => 'Secure checkout',
         'info_protected' => 'Your information is protected',
+        'already_subscribed' => 'You are already actively subscribed to this plan.',
+        'renewal_notice' => 'This purchase will extend your active subscription.',
+        'switch_notice' => 'This purchase will switch your current subscription to this plan.',
+        'renewal_badge' => 'Subscription Renewal',
+        'switch_badge' => 'Plan Switch',
     ],
     'status' => [
         'title_pending' => 'Payment Pending',
