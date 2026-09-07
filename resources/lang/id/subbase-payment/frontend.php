@@ -31,7 +31,7 @@ return [
         'next_pending' => 'Kami akan memverifikasi pembayaran Anda sebelum mengaktifkan langganan.',
         'next_canceled' => 'Anda dapat kembali ke halaman paket dan memilih opsi lain.',
         'back_to_plans' => 'Kembali ke Paket',
-        'continue_to_destination' => 'Lanjutkan ke Dashboard',
+        'continue_to_destination' => 'Lanjutkan',
         'redirecting_in' => 'Mengarahkan ulang dalam :seconds detik...',
         'footer_secure' => 'Checkout aman didukung oleh :app',
     ],

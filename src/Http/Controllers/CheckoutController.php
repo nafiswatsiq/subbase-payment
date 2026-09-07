@@ -54,17 +54,8 @@ class CheckoutController extends Controller
         $pricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
 
         try {
-            $returnUrl = config('subbase-payment.checkout.return_url')
-                ? (Str::startsWith(config('subbase-payment.checkout.return_url'), 'http')
-                    ? config('subbase-payment.checkout.return_url')
-                    : route(config('subbase-payment.checkout.return_url'), $plan->slug))
-                : route('subbase-payment.checkout.return', $plan->slug);
-
-            $cancelUrl = config('subbase-payment.checkout.cancel_url')
-                ? (Str::startsWith(config('subbase-payment.checkout.cancel_url'), 'http')
-                    ? config('subbase-payment.checkout.cancel_url')
-                    : route(config('subbase-payment.checkout.cancel_url'), $plan->slug))
-                : route('subbase-payment.checkout.cancel', $plan->slug);
+            $returnUrl = route('subbase-payment.checkout.return', $plan->slug);
+            $cancelUrl = route('subbase-payment.checkout.cancel', $plan->slug);
 
             $result = $payments->driver()->charge(new PaymentRequest(
                 $plan,

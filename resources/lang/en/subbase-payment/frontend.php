@@ -31,7 +31,7 @@ return [
         'next_pending' => 'We will verify your payment before activating your subscription.',
         'next_canceled' => 'You can return to the plans page and choose another option.',
         'back_to_plans' => 'Back to plans',
-        'continue_to_destination' => 'Continue to Dashboard',
+        'continue_to_destination' => 'Continue',
         'redirecting_in' => 'Redirecting in :seconds seconds...',
         'footer_secure' => 'Secure checkout powered by :app',
     ],

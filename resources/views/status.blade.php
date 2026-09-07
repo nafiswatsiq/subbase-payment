@@ -57,15 +57,21 @@
     </main>
 
     <script>
-        if (window.opener && !window.opener.closed) {
-            try {
-                window.opener.location.href = window.location.href;
-                window.close();
-            } catch (e) {}
-        } else {
-            @if(!empty($redirectUrl))
-                (function() {
-                    let seconds = 5;
+        (function() {
+            function handleAutoClose() {
+                if (window.opener && !window.opener.closed) {
+                    try {
+                        window.opener.location.href = window.location.href;
+                        window.close();
+                        return true;
+                    } catch (e) {}
+                }
+                return false;
+            }
+
+            if (!handleAutoClose()) {
+                @if(!empty($redirectUrl))
+                    let seconds = 10;
                     const targetUrl = @json($redirectUrl);
                     const noticeEl = document.getElementById('timer-notice');
                     const template = @json(__('subbase-payment::subbase-payment/frontend.status.redirecting_in'));
@@ -86,9 +92,9 @@
                             updateNotice();
                         }
                     }, 1000);
-                })();
-            @endif
-        }
+                @endif
+            }
+        })();
     </script>
 </body>
 </html>
