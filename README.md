@@ -209,31 +209,6 @@ Set `return_url` / `cancel_url` to override the default status page:
 
 ---
 
-## Events & Subscription Lifecycle
-
-Webhook verifies payment → dispatches `PaymentReceived` event.
-
-**Handle in your app (e.g. `AppServiceProvider`):**
-```php
-use Nafiswatsiq\SubbasePayment\Events\PaymentReceived;
-use Nafiswatsiq\Subbase\Models\Plan;
-use Illuminate\Support\Facades\Event;
-
-Event::listen(PaymentReceived::class, function (PaymentReceived $event) {
-    $payment = $event->paymentRecord;
-    $planId  = $event->metadata['plan_id'] ?? null;
-
-    $user = \App\Models\User::where('email', $payment->customer_email)->first();
-    $plan = Plan::find($planId);
-
-    if ($user && $plan) {
-        $user->newSubscription('default', $plan);
-    }
-});
-```
-
----
-
 ## Payment Driver & Documentation
 
 | Payment | Payment Driver | Driver Option | Guide |
