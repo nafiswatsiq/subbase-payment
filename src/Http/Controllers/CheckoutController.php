@@ -24,6 +24,12 @@ class CheckoutController extends Controller
             ->firstOrFail();
 
         $currency = $planModel::currencyFromLocale(app()->getLocale());
+        $pricing = PlanPriceHelper::formatWithDiscounts($plan, $currency);
+
+        if ((float) $pricing['final_amount'] <= 0 && Auth::check()) {
+            return $this->activateFreePlan(Auth::user(), $plan, $currency, $pricing);
+        }
+
         $driver = app(\Nafiswatsiq\SubbasePayment\PaymentManager::class)->driver();
 
         $user = Auth::user();
@@ -38,7 +44,7 @@ class CheckoutController extends Controller
 
         return view('subbase-payment::checkout', [
             'plan' => $plan,
-            'pricing' => PlanPriceHelper::formatWithDiscounts($plan, $currency),
+            'pricing' => $pricing,
             'currency' => $currency,
             'driverName' => $driver->name(),
             'driverLogo' => $driver->logo(),
@@ -63,6 +69,10 @@ class CheckoutController extends Controller
         $plan = $planModel::query()->where('slug', $plan)->active()->firstOrFail();
         $currency = $planModel::currencyFromLocale(app()->getLocale());
         $pricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
+
+        if ((float) $pricing['final_amount'] <= 0) {
+            return $this->activateFreePlan($user, $plan, $currency, $pricing);
+        }
 
         $subscriptionAction = 'new';
         if (method_exists($user, 'planSubscriptions')) {
@@ -109,6 +119,66 @@ class CheckoutController extends Controller
         ]);
 
         return redirect()->away($result->approvalUrl);
+    }
+
+    private function activateFreePlan($user, $plan, string $currency, array $pricing)
+    {
+        if (! method_exists($user, 'newPlanSubscription')) {
+            throw ValidationException::withMessages(['payment' => 'Unable to activate the free plan.']);
+        }
+
+        $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
+        DB::transaction(function () use ($user, $plan, $table, $currency, $pricing) {
+            $activeSubscription = method_exists($user, 'planSubscriptions')
+                ? $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first()
+                : null;
+
+            if ($activeSubscription) {
+                if ((string) $activeSubscription->plan_id === (string) $plan->getKey()) {
+                    $activeSubscription->renew();
+                    $subscription = $activeSubscription;
+                } else {
+                    $activeSubscription->changePlan($plan);
+                    $subscription = $activeSubscription;
+                }
+            } else {
+                $subscription = $user->newPlanSubscription('default', $plan);
+            }
+
+            DB::table($table)->insert([
+                'subscription_id' => $subscription->id,
+                'gateway_driver' => 'free',
+                'gateway_transaction_id' => 'free_' . (string) Str::uuid(),
+                'payment_status' => 'paid',
+                'customer_name' => $user->name ?? null,
+                'customer_email' => $user->email ?? null,
+                'amount' => $pricing['final_amount'],
+                'currency' => $currency,
+                'verified_at' => now(),
+                'metadata' => json_encode([
+                    'plan_id' => $plan->getKey(),
+                    'plan_slug' => $plan->slug,
+                    'user_id' => $user->getAuthIdentifier(),
+                    'subscription_action' => 'free',
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        });
+
+        $returnUrl = config('subbase-payment.checkout.return_url');
+        if ($returnUrl) {
+            return Str::startsWith($returnUrl, 'http')
+                ? redirect()->away($returnUrl)
+                : redirect()->route($returnUrl, $plan->slug);
+        }
+
+        return view('subbase-payment::status', [
+            'plan' => $plan->slug,
+            'status' => 'success',
+            'redirectUrl' => null,
+        ]);
     }
 
     public function returned(Request $request, string $plan, PaymentManager $payments)

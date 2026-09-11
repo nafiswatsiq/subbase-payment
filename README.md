@@ -181,6 +181,10 @@ Customize the checkout path, middleware, and post-payment redirects in
 The default `return_url` and `cancel_url` show the built-in status page. Set a
 named route or full URL to redirect the customer elsewhere after payment.
 
+Plans with a final price of `0` are activated immediately for authenticated
+users. They do not open a payment gateway; the activation is recorded as a
+verified `free` payment in the payment history.
+
 ### Custom Redirect After Payment
 
 Set `return_url` / `cancel_url` to override the default status page:
