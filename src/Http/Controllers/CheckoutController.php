@@ -25,12 +25,16 @@ class CheckoutController extends Controller
 
         $currency = $planModel::currencyFromLocale(app()->getLocale());
         $pricing = PlanPriceHelper::formatWithDiscounts($plan, $currency);
+        $resolvedPricing = PlanPriceHelper::resolveWithDiscounts($plan, $currency);
+        $isFreePlan = (float) $resolvedPricing['final_amount'] <= 0;
+        $driverName = $isFreePlan ? __('subbase-payment::subbase-payment/frontend.checkout.free_plan') : null;
+        $driverLogo = null;
 
-        if ((float) $pricing['final_amount'] <= 0 && Auth::check()) {
-            return $this->activateFreePlan(Auth::user(), $plan, $currency, $pricing);
+        if (! $isFreePlan) {
+            $driver = app(\Nafiswatsiq\SubbasePayment\PaymentManager::class)->driver();
+            $driverName = $driver->name();
+            $driverLogo = $driver->logo();
         }
-
-        $driver = app(\Nafiswatsiq\SubbasePayment\PaymentManager::class)->driver();
 
         $user = Auth::user();
         $subscriptionAction = 'new';
@@ -38,7 +42,8 @@ class CheckoutController extends Controller
         if ($user && method_exists($user, 'planSubscriptions')) {
             $activeSub = $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first();
             if ($activeSub) {
-                $subscriptionAction = (string) $activeSub->plan_id === (string) $plan->getKey() ? 'renew' : 'switch';
+                $samePlan = (string) $activeSub->plan_id === (string) $plan->getKey();
+                $subscriptionAction = $samePlan && $isFreePlan ? 'active' : ($samePlan ? 'renew' : 'switch');
             }
         }
 
@@ -46,8 +51,9 @@ class CheckoutController extends Controller
             'plan' => $plan,
             'pricing' => $pricing,
             'currency' => $currency,
-            'driverName' => $driver->name(),
-            'driverLogo' => $driver->logo(),
+            'driverName' => $driverName,
+            'driverLogo' => $driverLogo,
+            'isFreePlan' => $isFreePlan,
             'subscriptionAction' => $subscriptionAction,
         ]);
     }
@@ -128,22 +134,39 @@ class CheckoutController extends Controller
         }
 
         $table = config('subbase-payment.tables.subscription_payments', 'subscription_payments');
-        DB::transaction(function () use ($user, $plan, $table, $currency, $pricing) {
+
+        DB::transaction(function () use ($user, $plan, $table, $currency, $pricing): void {
             $activeSubscription = method_exists($user, 'planSubscriptions')
-                ? $user->planSubscriptions()->get()->filter(fn ($sub) => $sub->active())->first()
+                ? $user->planSubscriptions()
+                    ->where('plan_id', $plan->getKey())
+                    ->where(function ($query): void {
+                        $query->whereNull('ends_at')->orWhere('ends_at', '>', now());
+                    })
+                    ->lockForUpdate()
+                    ->first()
                 : null;
 
             if ($activeSubscription) {
-                if ((string) $activeSubscription->plan_id === (string) $plan->getKey()) {
-                    $activeSubscription->renew();
-                    $subscription = $activeSubscription;
-                } else {
-                    $activeSubscription->changePlan($plan);
-                    $subscription = $activeSubscription;
-                }
+                return;
+            }
+
+            $currentSubscription = method_exists($user, 'planSubscriptions')
+                ? $user->planSubscriptions()
+                    ->where(function ($query): void {
+                        $query->whereNull('ends_at')->orWhere('ends_at', '>', now());
+                    })
+                    ->lockForUpdate()
+                    ->first()
+                : null;
+
+            if ($currentSubscription) {
+                $currentSubscription->changePlan($plan);
+                $subscription = $currentSubscription;
             } else {
                 $subscription = $user->newPlanSubscription('default', $plan);
             }
+
+            $this->setFreePlanPeriod($subscription, $plan);
 
             DB::table($table)->insert([
                 'subscription_id' => $subscription->id,
@@ -164,9 +187,28 @@ class CheckoutController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
         });
 
+        return $this->freePlanStatusResponse($plan);
+    }
+
+    private function setFreePlanPeriod($subscription, $plan): void
+    {
+        $startsAt = now();
+        $interval = $plan->invoice_interval ?? 'month';
+        $count = (int) ($plan->invoice_period ?? 1);
+        $method = 'add' . ucfirst($interval) . 's';
+
+        $subscription->fill([
+            'starts_at' => $startsAt,
+            'ends_at' => $startsAt->copy()->{$method}($count),
+            'trial_ends_at' => null,
+            'canceled_at' => null,
+        ])->save();
+    }
+
+    private function freePlanStatusResponse($plan)
+    {
         $returnUrl = config('subbase-payment.checkout.return_url');
         if ($returnUrl) {
             return Str::startsWith($returnUrl, 'http')
