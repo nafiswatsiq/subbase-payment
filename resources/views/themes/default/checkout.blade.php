@@ -62,7 +62,12 @@
                     </div>
                 </div>
 
-                @if(isset($subscriptionAction) && $subscriptionAction === 'renew')
+                @if(isset($subscriptionAction) && $subscriptionAction === 'active')
+                    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-xs text-green-800">
+                        <span class="rounded-md bg-green-600 px-2 py-0.5 font-bold text-white uppercase tracking-wider text-[10px]">{{ __('subbase-payment::subbase-payment/frontend.checkout.active_badge') }}</span>
+                        <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.active_notice') }}</span>
+                    </div>
+                @elseif(isset($subscriptionAction) && $subscriptionAction === 'renew')
                     <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-800">
                         <span class="rounded-md bg-blue-600 px-2 py-0.5 font-bold text-white uppercase tracking-wider text-[10px]">{{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_badge') }}</span>
                         <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_notice') }}</span>
@@ -80,7 +85,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('subbase-payment.checkout.store', $plan->slug) }}" target="subbase_payment_popup" onsubmit="window.open('about:blank', 'subbase_payment_popup', 'width=580,height=700,top=' + Math.max(0, (screen.height - 700) / 2) + ',left=' + Math.max(0, (screen.width - 580) / 2) + ',resizable=yes,scrollbars=yes');" class="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg shadow-gray-900/5 sm:p-7">
+                <form method="POST" action="{{ route('subbase-payment.checkout.store', $plan->slug) }}"@unless($isFreePlan) target="subbase_payment_popup" onsubmit="window.open('about:blank', 'subbase_payment_popup', 'width=580,height=700,top=' + Math.max(0, (screen.height - 700) / 2) + ',left=' + Math.max(0, (screen.width - 580) / 2) + ',resizable=yes,scrollbars=yes');"@endunless class="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg shadow-gray-900/5 sm:p-7">
                     @csrf
                     <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-5">
                         <span class="grid h-9 w-9 place-items-center rounded-full bg-blue-500 text-sm font-bold text-white">1</span>
@@ -102,11 +107,11 @@
                         </div>
                     </div>
                     <div class="mt-7 border-t border-gray-100 pt-6">
-                        <button type="submit" class="flex w-full items-center justify-center gap-3 rounded-xl bg-gray-900 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-gray-900/15 transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            {{ __('subbase-payment::subbase-payment/frontend.checkout.continue_to_payment') }}
+                        <button type="submit" @disabled(isset($subscriptionAction) && $subscriptionAction === 'active') aria-disabled="{{ isset($subscriptionAction) && $subscriptionAction === 'active' ? 'true' : 'false' }}" class="flex w-full items-center justify-center gap-3 rounded-xl px-4 py-4 text-sm font-bold text-white shadow-lg transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {{ isset($subscriptionAction) && $subscriptionAction === 'active' ? 'cursor-not-allowed bg-gray-400 shadow-gray-900/5' : 'bg-gray-900 shadow-gray-900/15 hover:bg-gray-700' }}">
+                            {{ $isFreePlan ? __('subbase-payment::subbase-payment/frontend.checkout.subscribe') : __('subbase-payment::subbase-payment/frontend.checkout.continue_to_payment') }}
                             <span aria-hidden="true" class="text-lg leading-none">&#8594;</span>
                         </button>
-                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">{{ __('subbase-payment::subbase-payment/frontend.checkout.redirect_notice') }}</p>
+                        <p class="mt-4 text-center text-xs leading-5 text-gray-500">{{ $isFreePlan ? __('subbase-payment::subbase-payment/frontend.checkout.free_plan_notice') : __('subbase-payment::subbase-payment/frontend.checkout.redirect_notice') }}</p>
                     </div>
                 </form>
                 <div class="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-gray-500">

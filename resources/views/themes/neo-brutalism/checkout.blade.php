@@ -39,7 +39,24 @@
             </div>
 
             <div>
-                <form action="{{ route('subbase-payment.checkout.store', $plan->slug) }}" method="POST" class="space-y-6">
+                @if(isset($subscriptionAction) && $subscriptionAction === 'active')
+                    <div class="mb-6 border-4 border-black bg-green-300 p-4 font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs uppercase">
+                        <span class="bg-black text-white px-2 py-0.5 mr-2">{{ __('subbase-payment::subbase-payment/frontend.checkout.active_badge') }}</span>
+                        {{ __('subbase-payment::subbase-payment/frontend.checkout.active_notice') }}
+                    </div>
+                @elseif(isset($subscriptionAction) && $subscriptionAction === 'renew')
+                    <div class="mb-6 border-4 border-black bg-blue-300 p-4 font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs uppercase">
+                        <span class="bg-black text-white px-2 py-0.5 mr-2">{{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_badge') }}</span>
+                        {{ __('subbase-payment::subbase-payment/frontend.checkout.renewal_notice') }}
+                    </div>
+                @elseif(isset($subscriptionAction) && $subscriptionAction === 'switch')
+                    <div class="mb-6 border-4 border-black bg-purple-300 p-4 font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs uppercase">
+                        <span class="bg-black text-white px-2 py-0.5 mr-2">{{ __('subbase-payment::subbase-payment/frontend.checkout.switch_badge') }}</span>
+                        {{ __('subbase-payment::subbase-payment/frontend.checkout.switch_notice') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('subbase-payment.checkout.store', $plan->slug) }}" method="POST"@unless($isFreePlan) target="subbase_payment_popup" onsubmit="window.open('about:blank', 'subbase_payment_popup', 'width=580,height=700,top=' + Math.max(0, (screen.height - 700) / 2) + ',left=' + Math.max(0, (screen.width - 580) / 2) + ',resizable=yes,scrollbars=yes');"@endunless class="space-y-6">
                     @csrf
                     <div>
                         <label class="block text-sm font-black uppercase text-black">{{ __('subbase-payment::subbase-payment/frontend.checkout.full_name') }}</label>
@@ -51,9 +68,10 @@
                         <input type="email" name="email" value="{{ old('email', auth()->user()?->email) }}" required class="mt-2 w-full border-4 border-black bg-white p-3 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none focus:ring-0">
                     </div>
 
-                    <button type="submit" class="w-full border-4 border-black bg-pink-400 py-4 font-black uppercase tracking-wider text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-pink-300 active:translate-x-1 active:translate-y-1 active:shadow-none">
-                        {{ __('subbase-payment::subbase-payment/frontend.checkout.pay_now', ['driver' => ucfirst($driverName)]) }}
+                    <button type="submit" @disabled(isset($subscriptionAction) && $subscriptionAction === 'active') class="w-full border-4 border-black {{ isset($subscriptionAction) && $subscriptionAction === 'active' ? 'bg-gray-300 cursor-not-allowed opacity-60' : 'bg-pink-400 hover:bg-pink-300 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none' }} py-4 font-black uppercase tracking-wider text-black transition-all">
+                        {{ $isFreePlan ? __('subbase-payment::subbase-payment/frontend.checkout.subscribe') : __('subbase-payment::subbase-payment/frontend.checkout.pay_now', ['driver' => ucfirst($driverName)]) }}
                     </button>
+                    <p class="mt-2 text-center text-xs font-bold uppercase text-gray-700">{{ $isFreePlan ? __('subbase-payment::subbase-payment/frontend.checkout.free_plan_notice') : __('subbase-payment::subbase-payment/frontend.checkout.redirect_notice') }}</p>
                 </form>
             </div>
         </div>
