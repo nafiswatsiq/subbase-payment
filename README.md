@@ -30,6 +30,7 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 - 💳 **Multiple Gateway Drivers** — Built-in support for PayPal, Stripe, Midtrans, Xendit, and Paddle.
 - ⚙️ **Custom Gateway Support** — Extensible architecture to build your own payment driver.
 - 🛒 **Hosted Public Checkout** — Modern, responsive checkout UI automatically connected with Subbase plan components.
+- 🎨 **Multi-Theme Support** — Checkout pages and payment status views automatically match the active Subbase theme (`default`, `neo-brutalism`, `glassmorphism`, `claymorphism`, `cyberpunk`, `maximalism`).
 - 🔔 **Idempotent Webhooks** — Secure, signature-verified webhook handling to update payment status safely.
 - ⚡ **Automated CLI Setup** — Interactively install, configure, reset, or switch gateway drivers via `php artisan subbase-payment:install`.
 - 📧 **Email Invoices** — Optional email receipt/invoice delivery upon verified payment completion.
@@ -176,6 +177,24 @@ Customize the checkout path, middleware, and post-payment redirects in
     'return_url' => null,  // named route or full URL after successful payment
     'cancel_url' => null,  // named route or full URL after canceled payment
 ],
+```
+
+### Multi-Theme Integration
+
+Checkout pages (`checkout.blade.php`) and status pages (`status.blade.php`) automatically render using the active `SUBBASE_THEME` configured in your application.
+
+Supported themes:
+- `default`
+- `neo-brutalism`
+- `glassmorphism`
+- `claymorphism`
+- `cyberpunk`
+- `maximalism`
+
+Manage themes using Artisan:
+```bash
+php artisan subbase:theme-list
+php artisan subbase:theme-install neo-brutalism
 ```
 
 The default `return_url` and `cancel_url` show the built-in status page. Set a
