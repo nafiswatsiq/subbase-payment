@@ -3,11 +3,14 @@
 return [
     'checkout' => [
         'title' => 'Checkout',
+        'badge' => 'Checkout aman',
         'selected_plan' => 'Paket Terpilih',
         'secure_tagline' => 'Pembayaran aman. Proses cepat. Tanpa biaya tersembunyi.',
         'header_title' => 'Selesaikan Pesanan Anda',
         'step_indicator' => 'Langkah 1 dari 2',
         'billed_via' => 'Ditagih secara aman melalui :driver',
+        'total' => 'Total',
+        'pay_now' => 'Lanjutkan dengan :driver',
         'step_1_title' => 'Data Diri Anda',
         'step_1_subtitle' => 'Ke mana kami harus mengirimkan resi pembayaran Anda?',
         'full_name' => 'Nama Lengkap',

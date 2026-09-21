@@ -3,11 +3,14 @@
 return [
     'checkout' => [
         'title' => 'Checkout',
+        'badge' => 'Secure checkout',
         'selected_plan' => 'Selected plan',
         'secure_tagline' => 'Secure payments. Fast checkout. No hidden fees.',
         'header_title' => 'Complete your order',
         'step_indicator' => 'Step 1 of 2',
         'billed_via' => 'Billed securely via :driver',
+        'total' => 'Total',
+        'pay_now' => 'Continue with :driver',
         'step_1_title' => 'Your details',
         'step_1_subtitle' => 'Where should we send your payment receipt?',
         'full_name' => 'Full name',
