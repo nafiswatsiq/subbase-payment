@@ -25,7 +25,7 @@
                 <div class="mt-6 border-t border-cyan-400/40 pt-4">
                     <div class="flex justify-between font-black text-lg text-white">
                         <span>TOTAL_COST:</span>
-                        <span class="text-yellow-400">{{ $currency }} {{ number_format((float)$pricing['final_amount'], 2) }}</span>
+                        <span class="text-yellow-400">{{ $pricing['final_price'] }}</span>
                     </div>
                 </div>
             </div>

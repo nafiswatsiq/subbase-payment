@@ -25,7 +25,7 @@
                 <div class="mt-6 border-t border-slate-200 pt-4">
                     <div class="flex justify-between font-bold text-lg text-slate-900">
                         <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.total') }}</span>
-                        <span>{{ $currency }} {{ number_format((float)$pricing['final_amount'], 2) }}</span>
+                        <span>{{ $pricing['final_price'] }}</span>
                     </div>
                 </div>
             </div>
