@@ -22,6 +22,21 @@
         .theme-maximalism { background: #34135c !important; }
         .theme-maximalism main { border: 4px solid #000; border-radius: 0; background: #f472b6; box-shadow: 12px 12px 0 #facc15; }
         .theme-maximalism main a { border: 3px solid #000; border-radius: 0; background: #facc15; color: #000; box-shadow: 5px 5px 0 #000; }
+        .theme-neo-brutalism main > div:nth-child(2) > div { border: 3px solid #000; border-radius: 0; background: #a7f3d0; color: #000; box-shadow: 4px 4px 0 #000; }
+        .theme-neo-brutalism main > div:nth-child(2) p,
+        .theme-neo-brutalism main > div:nth-child(2) h1 { color: #000; }
+        .theme-glassmorphism main > div:nth-child(2) > div { border-color: rgba(255,255,255,.2); border-radius: 1rem; background: rgba(255,255,255,.08); color: #e2e8f0; }
+        .theme-glassmorphism main > div:nth-child(2) p,
+        .theme-glassmorphism main > div:nth-child(2) h1 { color: #e2e8f0; }
+        .theme-claymorphism main > div:nth-child(2) > div { border-color: #e2e8f0; border-radius: 1rem; background: #eef2f7; color: #475569; box-shadow: inset 3px 3px 8px rgba(15,23,42,.04); }
+        .theme-claymorphism main > div:nth-child(2) p,
+        .theme-claymorphism main > div:nth-child(2) h1 { color: #475569; }
+        .theme-cyberpunk main > div:nth-child(2) > div { border: 1px solid rgba(34,211,238,.5); border-radius: 0; background: #000; color: #67e8f9; }
+        .theme-cyberpunk main > div:nth-child(2) p,
+        .theme-cyberpunk main > div:nth-child(2) h1 { color: #67e8f9; }
+        .theme-maximalism main > div:nth-child(2) > div { border: 4px solid #000; border-radius: 0; background: #facc15; color: #000; box-shadow: 4px 4px 0 #000; }
+        .theme-maximalism main > div:nth-child(2) p,
+        .theme-maximalism main > div:nth-child(2) h1 { color: #000; }
     </style>
 </head>
 <body class="theme-{{ $theme }} relative grid min-h-screen place-items-center overflow-hidden bg-gray-900 px-6 text-white">

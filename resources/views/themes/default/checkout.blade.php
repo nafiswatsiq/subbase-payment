@@ -43,6 +43,46 @@
         .theme-maximalism main > div > section:last-child > div > div:last-child, .theme-maximalism form { border: 4px solid #000; border-radius: 0; background: #fff; box-shadow: 6px 6px 0 #000; }
         .theme-maximalism input { border: 3px solid #000; border-radius: 0; background: #fff; }
         .theme-maximalism button { border: 3px solid #000; border-radius: 0; background: #facc15; color: #000; }
+
+        /* The canonical markup keeps all payment data identical; these selectors skin each structural surface. */
+        .theme-neo-brutalism main > div > section:last-child > div:nth-child(2) { border: 3px solid #000; border-radius: 0; background: #cffafe; box-shadow: 5px 5px 0 #000; }
+        .theme-neo-brutalism main > div > section:last-child > div:nth-child(2) p,
+        .theme-neo-brutalism main > div > section:last-child > div:nth-child(2) div { color: #000; }
+        .theme-neo-brutalism main > div > section:last-child > div:nth-child(2) span { background: #67e8f9; color: #000; }
+        .theme-neo-brutalism main > div > section:last-child form > div:first-child { border-color: #000; }
+        .theme-neo-brutalism main > div > section:last-child form label,
+        .theme-neo-brutalism main > div > section:last-child form p { color: #000; }
+        .theme-neo-brutalism main > div > section:last-child form button { color: #fff; }
+        .theme-glassmorphism main > div > section:last-child > div:nth-child(2) { border-color: rgba(255,255,255,.2); border-radius: 1.25rem; background: rgba(255,255,255,.08); box-shadow: none; backdrop-filter: blur(16px); }
+        .theme-glassmorphism main > div > section:last-child > div:nth-child(2) p,
+        .theme-glassmorphism main > div > section:last-child > div:nth-child(2) div { color: #fff; }
+        .theme-glassmorphism main > div > section:last-child form label,
+        .theme-glassmorphism main > div > section:last-child form p,
+        .theme-glassmorphism main > div > section:last-child > div:first-child p,
+        .theme-glassmorphism main > div > section:last-child > div:first-child h2 { color: #e2e8f0; }
+        .theme-glassmorphism main > div > section:last-child form input { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: #fff; }
+        .theme-claymorphism main > div > section:last-child > div:nth-child(2) { border-color: #e2e8f0; border-radius: 1.5rem; background: #eef2f7; box-shadow: inset 4px 4px 10px rgba(15,23,42,.04), 6px 6px 12px rgba(15,23,42,.06); }
+        .theme-claymorphism main > div > section:last-child > div:nth-child(2) p,
+        .theme-claymorphism main > div > section:last-child > div:nth-child(2) div { color: #334155; }
+        .theme-claymorphism main > div > section:last-child form label,
+        .theme-claymorphism main > div > section:last-child form p,
+        .theme-claymorphism main > div > section:last-child > div:first-child p,
+        .theme-claymorphism main > div > section:last-child > div:first-child h2 { color: #334155; }
+        .theme-cyberpunk main > div > section:last-child > div:nth-child(2) { border: 1px solid rgba(34,211,238,.5); border-radius: 0; background: #05070d; box-shadow: 0 0 14px rgba(6,182,212,.15); }
+        .theme-cyberpunk main > div > section:last-child > div:nth-child(2) p,
+        .theme-cyberpunk main > div > section:last-child > div:nth-child(2) div { color: #fff; }
+        .theme-cyberpunk main > div > section:last-child > div:nth-child(2) span { background: transparent; color: #facc15; }
+        .theme-cyberpunk main > div > section:last-child form label,
+        .theme-cyberpunk main > div > section:last-child form p,
+        .theme-cyberpunk main > div > section:last-child > div:first-child p,
+        .theme-cyberpunk main > div > section:last-child > div:first-child h2 { color: #67e8f9; }
+        .theme-maximalism main > div > section:last-child > div:nth-child(2) { border: 4px solid #000; border-radius: 0; background: #fff; box-shadow: 6px 6px 0 #000; }
+        .theme-maximalism main > div > section:last-child > div:nth-child(2) p,
+        .theme-maximalism main > div > section:last-child > div:nth-child(2) div { color: #000; }
+        .theme-maximalism main > div > section:last-child form label,
+        .theme-maximalism main > div > section:last-child form p,
+        .theme-maximalism main > div > section:last-child > div:first-child p,
+        .theme-maximalism main > div > section:last-child > div:first-child h2 { color: #000; }
     </style>
 </head>
 <body class="theme-{{ $theme }} min-h-screen bg-gray-50 text-gray-900 antialiased">
