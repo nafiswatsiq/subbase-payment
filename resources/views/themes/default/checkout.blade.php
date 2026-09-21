@@ -1,3 +1,4 @@
+@php($theme = config('subbase.theme', 'default'))
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -5,8 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $plan->name }} | {{ __('subbase-payment::subbase-payment/frontend.checkout.title') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .theme-neo-brutalism { background: #f4efe6 !important; }
+        .theme-neo-brutalism main > div { border: 4px solid #000; border-radius: 0; box-shadow: 12px 12px 0 #000; }
+        .theme-neo-brutalism main > div > section:first-child { background: #ffd447; color: #000; }
+        .theme-neo-brutalism main > div > section:first-child a, .theme-neo-brutalism main > div > section:first-child h1, .theme-neo-brutalism main > div > section:first-child p, .theme-neo-brutalism main > div > section:first-child span { color: #000; }
+        .theme-neo-brutalism main > div > section:last-child { background: #fff; }
+        .theme-neo-brutalism main > div > section:last-child > div > div:last-child, .theme-neo-brutalism form { border: 3px solid #000; border-radius: 0; box-shadow: 5px 5px 0 #000; }
+        .theme-neo-brutalism input { border: 3px solid #000; border-radius: 0; background: #fff; }
+        .theme-neo-brutalism button { border: 3px solid #000; border-radius: 0; background: #000; }
+        .theme-glassmorphism { background: #0b1020 !important; color: #fff; }
+        .theme-glassmorphism main > div { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); border-radius: 2rem; box-shadow: 0 24px 80px rgba(0,0,0,.35); backdrop-filter: blur(24px); }
+        .theme-glassmorphism main > div > section:first-child, .theme-glassmorphism main > div > section:last-child { background: transparent; }
+        .theme-glassmorphism main > div > section:first-child { background: linear-gradient(145deg, rgba(99,102,241,.5), rgba(15,23,42,.2)); }
+        .theme-glassmorphism main > div > section:last-child > div > div:last-child, .theme-glassmorphism form { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); border-radius: 1.25rem; box-shadow: none; backdrop-filter: blur(16px); }
+        .theme-glassmorphism input { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.08); color: #fff; }
+        .theme-glassmorphism button { background: linear-gradient(100deg, #6366f1, #c026d3); }
+        .theme-claymorphism { background: #e9edf5 !important; color: #334155; }
+        .theme-claymorphism main > div { background: #f8fafc; border: 1px solid #fff; border-radius: 2rem; box-shadow: 18px 18px 36px rgba(15,23,42,.1), -18px -18px 36px rgba(255,255,255,.95); }
+        .theme-claymorphism main > div > section:first-child, .theme-claymorphism main > div > section:last-child { background: transparent; color: #334155; }
+        .theme-claymorphism main > div > section:first-child { background: #e0e7ff; color: #312e81; }
+        .theme-claymorphism main > div > section:last-child > div > div:last-child, .theme-claymorphism form { background: #f8fafc; border-color: #e2e8f0; border-radius: 1.5rem; box-shadow: inset 4px 4px 10px rgba(15,23,42,.04), 6px 6px 12px rgba(15,23,42,.06); }
+        .theme-claymorphism input { border-color: #e2e8f0; border-radius: 1rem; background: #eef2f7; }
+        .theme-claymorphism button { border-radius: 1rem; background: #4f46e5; }
+        .theme-cyberpunk { background: #05070d !important; color: #facc15; }
+        .theme-cyberpunk main > div { background: #020617; border: 1px solid #22d3ee; border-radius: 0; box-shadow: 0 0 28px rgba(6,182,212,.35); }
+        .theme-cyberpunk main > div > section:first-child, .theme-cyberpunk main > div > section:last-child { background: #020617; }
+        .theme-cyberpunk main > div > section:first-child { border-right: 1px solid rgba(34,211,238,.35); }
+        .theme-cyberpunk main > div > section:last-child > div > div:last-child, .theme-cyberpunk form { background: #05070d; border-color: rgba(34,211,238,.5); border-radius: 0; box-shadow: 0 0 14px rgba(6,182,212,.15); }
+        .theme-cyberpunk input { border: 1px solid #22d3ee; border-radius: 0; background: #000; color: #fff; }
+        .theme-cyberpunk button { border: 1px solid #facc15; border-radius: 0; background: #facc15; color: #000; box-shadow: 0 0 18px rgba(250,204,21,.45); }
+        .theme-maximalism { background: #34135c !important; }
+        .theme-maximalism main > div { border: 4px solid #000; border-radius: 0; background: #f472b6; box-shadow: 12px 12px 0 #facc15; }
+        .theme-maximalism main > div > section:first-child { background: #7e22ce; }
+        .theme-maximalism main > div > section:last-child { background: #f472b6; }
+        .theme-maximalism main > div > section:last-child > div > div:last-child, .theme-maximalism form { border: 4px solid #000; border-radius: 0; background: #fff; box-shadow: 6px 6px 0 #000; }
+        .theme-maximalism input { border: 3px solid #000; border-radius: 0; background: #fff; }
+        .theme-maximalism button { border: 3px solid #000; border-radius: 0; background: #facc15; color: #000; }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
+<body class="theme-{{ $theme }} min-h-screen bg-gray-50 text-gray-900 antialiased">
     <main class="mx-auto flex min-h-screen w-full max-w-7xl items-center px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
         <div class="grid w-full overflow-hidden rounded-2xl bg-white shadow-2xl shadow-gray-900/10 ring-1 ring-gray-200 lg:grid-cols-[0.92fr_1.08fr]">
             <section class="relative overflow-hidden bg-gray-900 px-7 py-8 text-white sm:px-12 sm:py-10 lg:px-14 lg:py-12">

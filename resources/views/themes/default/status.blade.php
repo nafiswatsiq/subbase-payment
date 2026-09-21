@@ -1,3 +1,4 @@
+@php($theme = config('subbase.theme', 'default'))
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -5,8 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $status === 'pending' ? __('subbase-payment::subbase-payment/frontend.status.title_pending') : ($status === 'success' ? __('subbase-payment::subbase-payment/frontend.status.title_success') : __('subbase-payment::subbase-payment/frontend.status.title_canceled')) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .theme-neo-brutalism { background: #f4efe6 !important; }
+        .theme-neo-brutalism main { border: 4px solid #000; border-radius: 0; box-shadow: 12px 12px 0 #000; }
+        .theme-neo-brutalism main a { border-radius: 0; border: 3px solid #000; box-shadow: 5px 5px 0 #000; }
+        .theme-glassmorphism { background: #0b1020 !important; }
+        .theme-glassmorphism main { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); border-radius: 2rem; backdrop-filter: blur(24px); }
+        .theme-glassmorphism main a { background: linear-gradient(100deg,#6366f1,#c026d3); border-radius: 1rem; }
+        .theme-claymorphism { background: #e9edf5 !important; }
+        .theme-claymorphism main { background: #f8fafc; border: 1px solid #fff; border-radius: 2rem; box-shadow: 18px 18px 36px rgba(15,23,42,.1), -18px -18px 36px rgba(255,255,255,.95); }
+        .theme-claymorphism main a { border-radius: 1rem; background: #4f46e5; }
+        .theme-cyberpunk { background: #05070d !important; }
+        .theme-cyberpunk main { background: #020617; border: 1px solid #22d3ee; border-radius: 0; box-shadow: 0 0 28px rgba(6,182,212,.35); }
+        .theme-cyberpunk main a { border: 1px solid #facc15; border-radius: 0; background: #facc15; color: #000; }
+        .theme-maximalism { background: #34135c !important; }
+        .theme-maximalism main { border: 4px solid #000; border-radius: 0; background: #f472b6; box-shadow: 12px 12px 0 #facc15; }
+        .theme-maximalism main a { border: 3px solid #000; border-radius: 0; background: #facc15; color: #000; box-shadow: 5px 5px 0 #000; }
+    </style>
 </head>
-<body class="relative grid min-h-screen place-items-center overflow-hidden bg-gray-900 px-6 text-white">
+<body class="theme-{{ $theme }} relative grid min-h-screen place-items-center overflow-hidden bg-gray-900 px-6 text-white">
     <div class="absolute -right-24 -top-24 h-80 w-80 rounded-full border-[32px] border-blue-500/10"></div>
     <div class="absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl"></div>
 
