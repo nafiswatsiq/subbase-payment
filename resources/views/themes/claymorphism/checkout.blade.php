@@ -6,23 +6,24 @@
     <title>{{ __('subbase-payment::subbase-payment/frontend.checkout.title', ['plan' => $plan->name]) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-100 p-6 font-sans text-slate-800">
-    <div class="mx-auto max-w-4xl rounded-3xl bg-slate-50 p-8 shadow-[14px_14px_28px_0px_rgba(0,0,0,0.06),-14px_-14px_28px_0px_rgba(255,255,255,0.9)] border border-white">
-        <header class="flex items-center justify-between border-b border-slate-200 pb-6">
+<body class="min-h-screen bg-[#e9edf5] p-4 font-sans text-slate-800 sm:p-8">
+    <div class="mx-auto max-w-5xl rounded-[2rem] bg-slate-50 p-5 shadow-[16px_16px_32px_0px_rgba(0,0,0,0.07),-16px_-16px_32px_0px_rgba(255,255,255,0.95)] border border-white sm:p-9">
+        <header class="flex flex-col gap-5 border-b border-slate-200 pb-6 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ url('/') }}" class="text-xl font-bold tracking-tight text-slate-900">
                 {{ config('app.name') }}
             </a>
-            <span class="rounded-full bg-indigo-100 px-3.5 py-1 text-xs font-bold text-indigo-600 shadow-[2px_2px_4px_0px_rgba(0,0,0,0.05)]">
+            <span class="w-fit rounded-full bg-indigo-100 px-3.5 py-1 text-xs font-bold text-indigo-600 shadow-[2px_2px_4px_0px_rgba(0,0,0,0.05)]">
                 {{ __('subbase-payment::subbase-payment/frontend.checkout.badge') }}
             </span>
         </header>
 
-        <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div class="rounded-2xl bg-indigo-50/60 p-6 shadow-[inset_4px_4px_8px_0px_rgba(0,0,0,0.03)] border border-indigo-100">
-                <h2 class="text-xl font-bold text-slate-900">{{ $plan->name }}</h2>
-                <p class="mt-2 text-sm text-slate-600">{{ $plan->description }}</p>
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="rounded-2xl bg-indigo-50/60 p-6 shadow-[inset_4px_4px_8px_0px_rgba(0,0,0,0.03)] border border-indigo-100 sm:p-8">
+                <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-indigo-500">Order summary / 01</p>
+                <h2 class="mt-4 text-3xl font-bold leading-tight text-slate-900">{{ $plan->name }}</h2>
+                <p class="mt-4 text-sm leading-6 text-slate-600">{{ $plan->description }}</p>
 
-                <div class="mt-6 border-t border-slate-200 pt-4">
+                <div class="mt-7 border-y border-slate-200 py-5">
                     <div class="flex justify-between font-bold text-lg text-slate-900">
                         <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.total') }}</span>
                         <span>{{ $pricing['final_price'] }}</span>

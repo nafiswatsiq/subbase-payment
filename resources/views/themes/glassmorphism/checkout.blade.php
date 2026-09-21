@@ -6,26 +6,27 @@
     <title>{{ __('subbase-payment::subbase-payment/frontend.checkout.title', ['plan' => $plan->name]) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="relative min-h-screen bg-slate-950 p-6 font-sans text-white">
+<body class="relative min-h-screen bg-[#0b1020] p-4 font-sans text-white sm:p-8">
     <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-600/30 blur-3xl"></div>
     <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-purple-600/30 blur-3xl"></div>
 
-    <div class="relative mx-auto max-w-4xl rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl shadow-2xl">
-        <header class="flex items-center justify-between border-b border-white/10 pb-6">
+    <div class="relative mx-auto max-w-5xl rounded-[2rem] border border-white/20 bg-white/[0.08] p-5 backdrop-blur-2xl shadow-2xl sm:p-9">
+        <header class="flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ url('/') }}" class="text-xl font-bold tracking-tight text-white">
                 {{ config('app.name') }}
             </a>
-            <span class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300 ring-1 ring-indigo-500/40">
+            <span class="w-fit rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300 ring-1 ring-indigo-500/40">
                 {{ __('subbase-payment::subbase-payment/frontend.checkout.badge') }}
             </span>
         </header>
 
-        <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-                <h2 class="text-xl font-bold text-white">{{ $plan->name }}</h2>
-                <p class="mt-2 text-sm text-slate-300">{{ $plan->description }}</p>
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.07] p-6 backdrop-blur-md sm:p-8">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.25em] text-indigo-300">Order summary / 01</p>
+                <h2 class="mt-4 text-3xl font-bold leading-tight text-white">{{ $plan->name }}</h2>
+                <p class="mt-4 text-sm leading-6 text-slate-300">{{ $plan->description }}</p>
 
-                <div class="mt-6 border-t border-white/10 pt-4">
+                <div class="mt-7 border-y border-white/10 py-5">
                     <div class="flex justify-between font-bold text-lg">
                         <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.total') }}</span>
                         <span>{{ $pricing['final_price'] }}</span>

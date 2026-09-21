@@ -6,23 +6,24 @@
     <title>{{ __('subbase-payment::subbase-payment/frontend.checkout.title', ['plan' => $plan->name]) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-purple-950 p-6 font-sans text-black">
-    <div class="mx-auto max-w-4xl border-4 border-black bg-pink-400 p-8 shadow-[12px_12px_0px_0px_rgba(250,204,21,1)]">
-        <header class="flex items-center justify-between border-b-4 border-black pb-6">
+<body class="min-h-screen bg-[#34135c] p-4 font-sans text-black sm:p-8">
+    <div class="mx-auto max-w-5xl border-4 border-black bg-pink-400 p-5 shadow-[12px_12px_0px_0px_rgba(250,204,21,1)] sm:p-9">
+        <header class="flex flex-col gap-5 border-b-4 border-black pb-6 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ url('/') }}" class="bg-black px-4 py-1 text-2xl font-black uppercase text-yellow-300">
                 {{ config('app.name') }}
             </a>
-            <span class="border-2 border-black bg-emerald-400 px-3 py-1 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+            <span class="w-fit border-2 border-black bg-emerald-400 px-3 py-1 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 {{ __('subbase-payment::subbase-payment/frontend.checkout.badge') }}
             </span>
         </header>
 
-        <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div class="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <h2 class="text-2xl font-black uppercase">{{ $plan->name }}</h2>
-                <p class="mt-2 text-sm font-bold">{{ $plan->description }}</p>
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-8">
+                <p class="text-[10px] font-black uppercase tracking-[0.25em] text-purple-700">Order summary / 01</p>
+                <h2 class="mt-4 text-3xl font-black uppercase leading-none">{{ $plan->name }}</h2>
+                <p class="mt-4 text-sm font-bold leading-6">{{ $plan->description }}</p>
 
-                <div class="mt-6 border-t-4 border-black pt-4">
+                <div class="mt-7 border-y-4 border-black py-5">
                     <div class="flex justify-between font-black uppercase text-xl">
                         <span>{{ __('subbase-payment::subbase-payment/frontend.checkout.total') }}</span>
                         <span>{{ $pricing['final_price'] }}</span>

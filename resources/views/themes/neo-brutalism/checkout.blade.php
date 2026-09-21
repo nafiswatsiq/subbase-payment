@@ -6,21 +6,22 @@
     <title>{{ __('subbase-payment::subbase-payment/frontend.checkout.title', ['plan' => $plan->name]) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-amber-50 p-6 font-sans text-black">
-    <div class="mx-auto max-w-4xl border-4 border-black bg-white p-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
-        <header class="flex items-center justify-between border-b-4 border-black pb-6">
+<body class="min-h-screen bg-[#f4efe6] p-4 font-sans text-black sm:p-8">
+    <div class="mx-auto max-w-5xl border-4 border-black bg-white p-5 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] sm:p-9">
+        <header class="flex flex-col gap-5 border-b-4 border-black pb-6 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ url('/') }}" class="text-2xl font-black uppercase tracking-wider text-black">
                 {{ config('app.name') }}
             </a>
-            <span class="border-2 border-black bg-yellow-300 px-3 py-1 text-xs font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <span class="w-fit border-2 border-black bg-yellow-300 px-3 py-1 text-xs font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 {{ __('subbase-payment::subbase-payment/frontend.checkout.badge') }}
             </span>
         </header>
 
-        <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div class="border-4 border-black bg-cyan-100 p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <h2 class="text-xl font-black uppercase text-black">{{ $plan->name }}</h2>
-                <p class="mt-2 text-sm font-bold text-gray-800">{{ $plan->description }}</p>
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="border-4 border-black bg-cyan-100 p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-8">
+                <p class="text-[10px] font-black uppercase tracking-[0.25em] text-cyan-800">ORDER SUMMARY / 01</p>
+                <h2 class="mt-4 text-3xl font-black uppercase leading-none text-black">{{ $plan->name }}</h2>
+                <p class="mt-4 text-sm font-bold leading-6 text-gray-800">{{ $plan->description }}</p>
 
                 <div class="mt-6 border-t-4 border-black pt-4">
                     <div class="flex justify-between font-black uppercase text-lg">
@@ -29,7 +30,7 @@
                     </div>
                 </div>
 
-                <ul class="mt-6 space-y-2 border-t-2 border-black pt-4">
+                <ul class="mt-7 space-y-3 border-t-2 border-black pt-5">
                     @foreach($plan->features as $feature)
                         <li class="flex items-center gap-2 text-sm font-bold">
                             <span class="font-black text-black">►</span> {{ $feature->name }}

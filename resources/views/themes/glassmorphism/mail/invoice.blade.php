@@ -21,6 +21,13 @@
                                 <p style="margin:0; font-size:16px; font-weight:bold; color:#818cf8;">{{ $payment->plan_name ?? 'Subscription' }}</p>
                                 <p style="margin:8px 0 0 0; font-size:24px; font-weight:bold; color:#ffffff;">{{ $payment->currency }} {{ number_format((float)$payment->amount, 2) }}</p>
                             </div>
+                            <p style="margin:12px 0 0 0; font-size:12px; color:#94a3b8;"><strong>TRANSACTION:</strong> {{ $payment->gateway_transaction_id ?? $payment->id }}</p>
+                            @if(!empty($planFeatures))
+                                <p style="margin:20px 0 8px 0; font-size:11px; text-transform:uppercase; letter-spacing:.15em; color:#818cf8;">Included features</p>
+                                @foreach($planFeatures as $feature)
+                                    <p style="margin:4px 0; font-size:13px; color:#cbd5e1;">✓ {{ is_array($feature) ? ($feature['name'] ?? '') : ($feature->name ?? $feature) }}</p>
+                                @endforeach
+                            @endif
                         </td>
                     </tr>
                     <tr>

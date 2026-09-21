@@ -6,26 +6,31 @@
     <title>{{ $status === 'pending' ? __('subbase-payment::subbase-payment/frontend.status.title_pending') : ($status === 'success' ? __('subbase-payment::subbase-payment/frontend.status.title_success') : __('subbase-payment::subbase-payment/frontend.status.title_canceled')) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="relative grid min-h-screen place-items-center bg-slate-950 p-6 font-sans text-white">
+<body class="relative grid min-h-screen place-items-center bg-[#0b1020] p-4 font-sans text-white sm:p-8">
     <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-600/30 blur-3xl"></div>
     <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-purple-600/30 blur-3xl"></div>
 
-    <main class="relative w-full max-w-lg rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-2xl shadow-2xl">
+    <main class="relative w-full max-w-xl rounded-[2rem] border border-white/20 bg-white/[0.08] p-6 backdrop-blur-2xl shadow-2xl sm:p-10">
         <div class="flex items-center justify-between border-b border-white/10 pb-4">
             <span class="text-lg font-bold">{{ config('app.name') }}</span>
             <span class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300">STATUS</span>
         </div>
 
-        <div class="mt-8 text-center">
+        <div class="mt-10 text-center">
             <div class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-white/20 bg-white/10 text-2xl font-bold backdrop-blur-md">
                 {{ $status === 'canceled' ? '✕' : '✓' }}
             </div>
-            <h1 class="mt-6 text-2xl font-bold text-white">
+            <p class="mt-7 text-[10px] font-semibold uppercase tracking-[0.3em] text-indigo-300">Transaction status / {{ strtoupper($status) }}</p>
+            <h1 class="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
                 {{ $status === 'pending' ? __('subbase-payment::subbase-payment/frontend.status.heading_pending') : ($status === 'success' ? __('subbase-payment::subbase-payment/frontend.status.heading_success') : __('subbase-payment::subbase-payment/frontend.status.heading_canceled')) }}
             </h1>
-            <p class="mt-3 text-sm text-slate-300">
+            <p class="mx-auto mt-5 max-w-md text-sm leading-6 text-slate-300">
                 {{ $status === 'pending' ? __('subbase-payment::subbase-payment/frontend.status.subtitle_pending') : ($status === 'success' ? __('subbase-payment::subbase-payment/frontend.status.subtitle_success') : __('subbase-payment::subbase-payment/frontend.status.subtitle_canceled')) }}
             </p>
+        </div>
+
+        <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.06] p-4 text-xs leading-5 text-slate-300">
+            {{ $status === 'success' ? __('subbase-payment::subbase-payment/frontend.status.next_success') : ($status === 'pending' ? __('subbase-payment::subbase-payment/frontend.status.next_pending') : __('subbase-payment::subbase-payment/frontend.status.next_canceled')) }}
         </div>
 
         @if(!empty($redirectUrl))

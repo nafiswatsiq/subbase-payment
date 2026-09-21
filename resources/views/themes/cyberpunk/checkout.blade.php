@@ -6,23 +6,24 @@
     <title>{{ __('subbase-payment::subbase-payment/frontend.checkout.title', ['plan' => $plan->name]) }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-black p-6 font-mono text-yellow-400">
-    <div class="mx-auto max-w-4xl border-2 border-cyan-400 bg-slate-950 p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)]">
-        <header class="flex items-center justify-between border-b-2 border-cyan-400/50 pb-6">
+<body class="min-h-screen bg-[#05070d] p-4 font-mono text-yellow-400 sm:p-8">
+    <div class="mx-auto max-w-5xl border border-cyan-400/80 bg-slate-950 p-5 shadow-[0_0_25px_rgba(6,182,212,0.4)] sm:p-9">
+        <header class="flex flex-col gap-5 border-b-2 border-cyan-400/50 pb-6 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ url('/') }}" class="text-xl font-black uppercase text-yellow-400 tracking-wider">
                 SYS://{{ config('app.name') }}
             </a>
-            <span class="border border-yellow-400 bg-yellow-400/10 px-3 py-1 text-xs font-black uppercase text-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)]">
+            <span class="w-fit border border-yellow-400 bg-yellow-400/10 px-3 py-1 text-xs font-black uppercase text-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)]">
                 TRANSACTION_GATEWAY
             </span>
         </header>
 
-        <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div class="border border-cyan-400/40 bg-black p-6">
-                <h2 class="text-xl font-black uppercase text-yellow-400">&gt; {{ $plan->name }}</h2>
-                <p class="mt-2 text-xs text-slate-400">{{ $plan->description }}</p>
+        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="border border-cyan-400/40 bg-black p-6 sm:p-8">
+                <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-fuchsia-400">// ORDER_SUMMARY / 01</p>
+                <h2 class="mt-4 text-3xl font-black uppercase leading-none text-yellow-400">&gt; {{ $plan->name }}</h2>
+                <p class="mt-4 text-xs leading-6 text-slate-400">{{ $plan->description }}</p>
 
-                <div class="mt-6 border-t border-cyan-400/40 pt-4">
+                <div class="mt-7 border-y border-cyan-400/40 py-5">
                     <div class="flex justify-between font-black text-lg text-white">
                         <span>TOTAL_COST:</span>
                         <span class="text-yellow-400">{{ $pricing['final_price'] }}</span>
