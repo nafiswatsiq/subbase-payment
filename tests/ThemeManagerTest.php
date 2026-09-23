@@ -47,7 +47,7 @@ class ThemeManagerTest extends TestCase
         $this->assertContains('default', $themes);
         $this->assertContains('neo-brutalism', $themes);
         $this->assertContains('glassmorphism', $themes);
-        $this->assertContains('claymorphism', $themes);
+        $this->assertContains('neumorphism', $themes);
         $this->assertContains('cyberpunk', $themes);
         $this->assertContains('maximalism', $themes);
     }

@@ -30,7 +30,7 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 - 💳 **Multiple Gateway Drivers** — Built-in support for PayPal, Stripe, Midtrans, Xendit, and Paddle.
 - ⚙️ **Custom Gateway Support** — Extensible architecture to build your own payment driver.
 - 🛒 **Hosted Public Checkout** — Modern, responsive checkout UI automatically connected with Subbase plan components.
-- 🎨 **Multi-Theme Support** — Checkout pages and payment status views automatically match the active Subbase theme (`default`, `neo-brutalism`, `glassmorphism`, `claymorphism`, `cyberpunk`, `maximalism`).
+- 🎨 **Multi-Theme Support** — Checkout pages and payment status views automatically match the active Subbase theme (`default`, `neo-brutalism`, `glassmorphism`, `neumorphism`, `cyberpunk`, `maximalism`).
 - 🔔 **Idempotent Webhooks** — Secure, signature-verified webhook handling to update payment status safely.
 - ⚡ **Automated CLI Setup** — Interactively install, configure, reset, or switch gateway drivers via `php artisan subbase-payment:install`.
 - 📧 **Email Invoices** — Optional email receipt/invoice delivery upon verified payment completion.
@@ -159,6 +159,20 @@ Render the pricing component in any Blade view:
 <x-subbase::plan-list />
 ```
 
+Customize pricing header text with `label`, `title`, and `subtitle`:
+
+```blade
+<x-subbase::plan-list
+    label="Membership"
+    title="Choose your access level"
+    subtitle="Simple plans with no hidden fees."
+/>
+```
+
+Each prop is optional. Omitted values use the default theme translations, or
+fallback text: `Pricing`, `Simple, transparent pricing`, and `Choose the plan
+that fits your needs. No hidden fees.`
+
 When the payment plugin is installed, it automatically uses the
 `subbase-payment.checkout` route:
 
@@ -187,7 +201,7 @@ Supported themes:
 - `default`
 - `neo-brutalism`
 - `glassmorphism`
-- `claymorphism`
+- `neumorphism`
 - `cyberpunk`
 - `maximalism`
 
