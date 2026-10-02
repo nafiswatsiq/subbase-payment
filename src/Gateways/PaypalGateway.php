@@ -6,14 +6,20 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Nafiswatsiq\SubbasePayment\Contracts\PaymentGatewayInterface;
 use Nafiswatsiq\SubbasePayment\Contracts\CapturesPayments;
+use Nafiswatsiq\SubbasePayment\Contracts\ValidatesConfiguration;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\Data\PaymentResult;
 use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
 use RuntimeException;
 
-class PaypalGateway implements PaymentGatewayInterface, CapturesPayments
+class PaypalGateway implements PaymentGatewayInterface, CapturesPayments, ValidatesConfiguration
 {
+    public function validateConfiguration(): void
+    {
+        $this->api();
+    }
+
     public function charge(PaymentRequest $request): PaymentResult
     {
         $response = $this->api()->post('/v2/checkout/orders', [

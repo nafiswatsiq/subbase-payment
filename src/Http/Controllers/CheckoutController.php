@@ -9,11 +9,44 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
+use Nafiswatsiq\SubbasePayment\Contracts\ValidatesConfiguration;
+use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use Nafiswatsiq\SubbasePayment\PaymentManager;
 use Nafiswatsiq\Subbase\Helpers\PlanPriceHelper;
 
 class CheckoutController extends Controller
 {
+    public function preflight(string $plan, PaymentManager $payments)
+    {
+        if (! Auth::check()) {
+            return response()->json([
+                'message' => 'You must be logged in to subscribe.',
+            ], 422);
+        }
+
+        try {
+            $driver = $payments->driver();
+
+            if ($driver instanceof ValidatesConfiguration) {
+                $driver->validateConfiguration();
+            }
+
+            return response()->json(['ok' => true]);
+        } catch (PaymentConfigurationException $exception) {
+            report($exception);
+
+            return response()->json([
+                'message' => 'Payment gateway is not configured correctly. Please try again later.',
+            ], 422);
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return response()->json([
+                'message' => 'Payment gateway authentication failed. Please try again later.',
+            ], 422);
+        }
+    }
+
     public function show(string $plan)
     {
         $planModel = config('subbase.models.plan', \Nafiswatsiq\Subbase\Models\Plan::class);

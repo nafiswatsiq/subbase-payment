@@ -6,14 +6,20 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Nafiswatsiq\SubbasePayment\Contracts\PaymentGatewayInterface;
+use Nafiswatsiq\SubbasePayment\Contracts\ValidatesConfiguration;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\Data\PaymentResult;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
 use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use RuntimeException;
 
-class MidtransGateway implements PaymentGatewayInterface
+class MidtransGateway implements PaymentGatewayInterface, ValidatesConfiguration
 {
+    public function validateConfiguration(): void
+    {
+        $this->authorized();
+    }
+
     public function charge(PaymentRequest $request): PaymentResult
     {
         $orderId = 'SUB-'.strtoupper(Str::random(12));

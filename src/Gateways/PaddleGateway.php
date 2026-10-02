@@ -5,14 +5,20 @@ namespace Nafiswatsiq\SubbasePayment\Gateways;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Nafiswatsiq\SubbasePayment\Contracts\PaymentGatewayInterface;
+use Nafiswatsiq\SubbasePayment\Contracts\ValidatesConfiguration;
 use Nafiswatsiq\SubbasePayment\Data\PaymentRequest;
 use Nafiswatsiq\SubbasePayment\Data\PaymentResult;
 use Nafiswatsiq\SubbasePayment\Exceptions\InvalidWebhookSignatureException;
 use Nafiswatsiq\SubbasePayment\Exceptions\PaymentConfigurationException;
 use RuntimeException;
 
-class PaddleGateway implements PaymentGatewayInterface
+class PaddleGateway implements PaymentGatewayInterface, ValidatesConfiguration
 {
+    public function validateConfiguration(): void
+    {
+        $this->api();
+    }
+
     public function charge(PaymentRequest $request): PaymentResult
     {
         $priceId = config('subbase-payment.gateways.paddle.price_id');

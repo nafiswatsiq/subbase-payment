@@ -242,6 +242,8 @@
                     </div>
                 @endif
 
+                <div id="payment-preflight-error" class="mt-5 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="alert"></div>
+
                 <form method="POST" action="{{ route('subbase-payment.checkout.store', $plan->slug) }}"@unless($isFreePlan) target="subbase_payment_popup" onsubmit="const popupWidth = 580, popupHeight = 700, availableScreen = window.screen; const screenLeft = availableScreen.availLeft ?? availableScreen.left ?? 0, screenTop = availableScreen.availTop ?? availableScreen.top ?? 0; const left = Math.max(screenLeft, screenLeft + Math.round((availableScreen.availWidth - popupWidth) / 2)), top = Math.max(screenTop, screenTop + Math.round((availableScreen.availHeight - popupHeight) / 2)); const paymentPopup = window.open('about:blank', 'subbase_payment_popup', 'width=' + popupWidth + ',height=' + popupHeight + ',top=' + top + ',left=' + left + ',resizable=yes,scrollbars=yes'); if (paymentPopup) { paymentPopup.moveTo(left, top); paymentPopup.resizeTo(popupWidth, popupHeight); paymentPopup.focus(); }"@endunless class="mt-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-lg shadow-gray-900/5 sm:p-7">
                     @csrf
                     <div class="mb-6 flex items-center gap-3 border-b border-gray-100 pb-5">
@@ -283,5 +285,40 @@
             </section>
         </div>
     </main>
+    @unless($isFreePlan)
+        <script>
+            (() => {
+                const form = document.querySelector('form[action="{{ route('subbase-payment.checkout.store', $plan->slug) }}"]');
+                const button = form?.querySelector('button[type="submit"]');
+                const error = document.getElementById('payment-preflight-error');
+
+                if (!form || !button || !error) {
+                    return;
+                }
+
+                button.disabled = true;
+                button.setAttribute('aria-busy', 'true');
+
+                fetch(@json(route('subbase-payment.checkout.preflight', $plan->slug)), {
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin',
+                })
+                    .then(async (response) => {
+                        const payload = await response.json().catch(() => ({}));
+
+                        if (!response.ok) {
+                            throw new Error(payload.message || 'Unable to verify the payment gateway.');
+                        }
+
+                        button.disabled = false;
+                        button.removeAttribute('aria-busy');
+                    })
+                    .catch((exception) => {
+                        error.textContent = exception.message;
+                        error.classList.remove('hidden');
+                    });
+            })();
+        </script>
+    @endunless
 </body>
 </html>

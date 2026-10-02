@@ -33,6 +33,9 @@ Route::middleware(config('subbase-payment.checkout.middleware', ['web']))
         Route::get('/{plan}', [CheckoutController::class, 'show'])
             ->name('subbase-payment.checkout');
 
+        Route::get('/{plan}/preflight', [CheckoutController::class, 'preflight'])
+            ->name('subbase-payment.checkout.preflight');
+
         Route::post('/{plan}', [CheckoutController::class, 'store'])
             ->name('subbase-payment.checkout.store');
 
