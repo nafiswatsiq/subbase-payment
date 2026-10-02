@@ -54,7 +54,13 @@ Payment gateway integrations for [`nafiswatsiq/subbase`](https://github.com/nafi
 ### 1. Install via Composer
 
 ```bash
-composer require nafiswatsiq/subbase-payment
+composer require nafiswatsiq/subbase-payment -W
+```
+
+To update the payment package and its dependencies:
+
+```bash
+composer update nafiswatsiq/subbase-payment -W
 ```
 
 Install Subbase and publish its migrations:
