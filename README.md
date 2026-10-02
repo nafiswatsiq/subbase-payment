@@ -205,6 +205,41 @@ Supported themes:
 - `cyberpunk`
 - `maximalism`
 
+#### Theme Preview
+
+<table>
+    <tr>
+        <td align="center" width="50%">
+            <img src="./.github/resources/checkout.png" alt="Default theme preview" width="100%" />
+            <br /><sub><b>Default</b></sub>
+        </td>
+        <td align="center" width="50%">
+            <img src="./.github/resources/neo-brutalism.png" alt="Neo-brutalism theme preview" width="100%" />
+            <br /><sub><b>Neo-brutalism</b></sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" width="50%">
+            <img src="./.github/resources/glassmorphism.png" alt="Glassmorphism theme preview" width="100%" />
+            <br /><sub><b>Glassmorphism</b></sub>
+        </td>
+        <td align="center" width="50%">
+            <img src="./.github/resources/neumorphism.png" alt="Neumorphism theme preview" width="100%" />
+            <br /><sub><b>Neumorphism</b></sub>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" width="50%">
+            <img src="./.github/resources/cyberpunk.png" alt="Cyberpunk theme preview" width="100%" />
+            <br /><sub><b>Cyberpunk</b></sub>
+        </td>
+        <td align="center" width="50%">
+            <img src="./.github/resources/maximalism.png" alt="Maximalism theme preview" width="100%" />
+            <br /><sub><b>Maximalism</b></sub>
+        </td>
+    </tr>
+</table>
+
 Manage themes using Artisan:
 ```bash
 php artisan subbase:theme-list
